@@ -44,7 +44,11 @@ La clave solo viaja a `api.openai.com`. No hay servidor intermedio, ni analític
 
 ### `conocimiento.json`
 
-Sin él la IA responde de conocimiento general y **puede inventar números de artículo**. El prompt del sistema le prohíbe citar lo que no puede sostener, pero la única garantía real es darle los textos:
+Sin él la IA responde de conocimiento general y **puede inventar números de artículo**.
+
+Hay dos formas de construirlo. **Desde la propia app** (⚙ Ajustes → *Subir normativa y construir la base*): se arrastran los PDF, la app extrae el texto con pdf.js, lo trocea por artículo, guarda el resultado en IndexedDB de ese navegador y muestra un mapa de cobertura por ruta. Nada se sube a ningún servidor. Desde ahí se descarga el `conocimiento.json` para publicarlo en el repositorio, que es lo que hace que la base la tengan **todos** los participantes y no solo quien la construyó. O **desde la línea de comandos** con `construir_conocimiento.py`, que además admite `.docx` y no depende del navegador.
+
+En ambos casos el campo que decide si un fragmento se recupera es `tema`, porque el buscador compara palabras contra él. La app permite escribir esas claves a mano por fuente, o pedírselas al modelo: se le da el vocabulario real de los módulos y devuelve las palabras con las que ese documento debería recuperarse. Conviene revisarlas. Los PDF escaneados no tienen texto extraíble y la app lo dice en lugar de generar fragmentos vacíos. El prompt del sistema le prohíbe citar lo que no puede sostener, pero la única garantía real es darle los textos:
 
 ```json
 {
