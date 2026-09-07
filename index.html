@@ -216,6 +216,20 @@ footer b{color:var(--papel)}
 .constancia .cod{font-family:'Space Mono';font-weight:700;font-size:15px;letter-spacing:1px;background:var(--papel);border:2px solid var(--tinta);border-radius:6px;padding:6px 12px;display:inline-block;margin-top:10px}
 @media print{header,.reloj,footer,.btn,.overlay{display:none!important}}
 ul.li{margin:8px 0 0 20px} ul.li li{margin-bottom:5px;font-size:13.8px}
+
+/* taller de la base de conocimiento */
+.soltar{border:3px dashed var(--tinta);border-radius:14px;padding:22px 16px;text-align:center;background:#fff;cursor:pointer}
+.soltar.sobre{background:var(--sello);border-style:solid}
+.fuente{background:#fff;border:2.5px solid var(--tinta);border-radius:12px;padding:12px 14px;margin-top:11px;box-shadow:var(--sombra)}
+.fuente .fn{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fuente .fm{font-family:'Space Mono';font-size:11px;color:var(--gris);margin-top:2px}
+.fuente input{width:100%;background:var(--papel);border:2px solid var(--tinta);border-radius:8px;padding:7px 10px;font-size:13px;margin-top:7px}
+.cob{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.cobr{border:2px solid var(--tinta);border-radius:10px;padding:8px 10px;background:#fff;font-size:12.5px}
+.cobr .cn{font-weight:700}
+.cobr .cb{height:6px;background:#EDEBE2;border:1px solid var(--tinta);border-radius:2px;margin-top:5px;overflow:hidden}
+.cobr .cb i{display:block;height:100%;background:var(--verde)}
+.cobr.vacio .cb i{background:var(--rojo)}
 </style>
 </head>
 <body>
@@ -416,11 +430,14 @@ ul.li{margin:8px 0 0 20px} ul.li li{margin-bottom:5px;font-size:13.8px}
       </select>
     </div>
     <div class="campo">
-      <label>Base de conocimiento verificada (opcional)</label>
+      <label>Base de conocimiento verificada</label>
       <div class="nota" id="kb-info" style="margin-bottom:8px">—</div>
-      <button class="btn claro sm" id="btn-load-kb">📂 Cargar conocimiento.json</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sello sm" id="btn-taller">📥 Subir normativa y construir la base</button>
+        <button class="btn claro sm" id="btn-load-kb">📂 Cargar un conocimiento.json</button>
+      </div>
       <input type="file" id="kb-file" accept="application/json" style="display:none">
-      <div class="nota">Si junto al <span class="mono">index.html</span> hay un <span class="mono">conocimiento.json</span> con los textos normativos verificados, la app lo carga sola y ancla en él todo lo que genera. Sin él, la IA responde de conocimiento general y puede equivocarse en artículos y cifras: es la razón por la que cada ficha lleva su estado de verificación.</div>
+      <div class="nota">Sin base verificada la IA responde de conocimiento general y puede equivocarse en artículos y cifras. Si junto al <span class="mono">index.html</span> hay un <span class="mono">conocimiento.json</span>, la app lo carga sola al arrancar.</div>
     </div>
     <div class="campo">
       <label>El reloj del expediente</label>
@@ -438,6 +455,31 @@ ul.li{margin:8px 0 0 20px} ul.li li{margin-bottom:5px;font-size:13.8px}
       <input type="file" id="import-file" accept="application/json" style="display:none">
       <div class="nota">No hay cuenta que eliminar porque nunca hubo cuenta. «Borrar todo» vacía el <span class="mono">localStorage</span> de este navegador y no queda rastro en ningún otro sitio.</div>
     </div>
+  </div>
+</div></div>
+
+<div class="overlay" id="ov-kb"><div class="modal ancho">
+  <div class="mhead"><h3>Base de conocimiento</h3><button class="x" data-close="ov-kb">×</button></div>
+  <div class="mbody">
+    <p class="nota" style="margin-bottom:12px">Suba aquí los textos normativos <b>ya verificados en fuente oficial</b>. La app los trocea por artículo dentro de su navegador —ningún archivo se envía a ninguna parte— y ancla en ellos todo lo que genere. Es la única forma de que deje de poder inventarse un artículo.</p>
+
+    <div class="soltar" id="soltar">
+      <div style="font-size:30px">📄</div>
+      <div style="font-weight:700;margin-top:5px">Arrastre aquí los PDF o pulse para elegirlos</div>
+      <div class="nota">PDF con texto seleccionable, <span class="mono">.txt</span> o <span class="mono">.md</span>. Los PDF escaneados no sirven: no tienen texto que extraer y la app se lo dirá.</div>
+      <input type="file" id="kb-archivos" accept=".pdf,.txt,.md" multiple style="display:none">
+    </div>
+    <div id="kb-progreso"></div>
+
+    <div id="kb-fuentes"></div>
+
+    <div id="kb-cobertura"></div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn" id="btn-kb-export">⬇ Descargar conocimiento.json</button>
+      <button class="btn claro sm" id="btn-kb-vaciar">🗑 Vaciar la base</button>
+    </div>
+    <p class="nota" style="margin-top:10px">Lo que suba aquí vive solo en este navegador. Para que lo tengan <b>todos</b> los participantes, descargue el <span class="mono">conocimiento.json</span> y súbalo al repositorio junto al <span class="mono">index.html</span>.</p>
   </div>
 </div></div>
 
@@ -796,9 +838,13 @@ function htmlError(e){
 function pipe(ag,st){ document.querySelectorAll(".pstep").forEach(s=>{ if(s.dataset.ag===ag){ s.classList.remove("act","fin"); if(st) s.classList.add(st); } }); }
 function pipeReset(){ document.querySelectorAll(".pstep").forEach(s=>s.classList.remove("act","fin")); }
 
-/* ---------- base de conocimiento opcional ---------- */
-const KB={listo:false, chunks:[], meta:{}};
-function kbBuild(d){ KB.chunks=(d.chunks||[]).map((c,i)=>({id:c.id||i,tema:c.tema||"",texto:c.texto||""})); KB.meta=d; KB.listo=KB.chunks.length>0; kbInfo(); }
+/* ---------- base de conocimiento ---------- */
+const KB={listo:false, chunks:[], fuentes:[], meta:{}, local:false};
+function kbBuild(d,local){
+  KB.chunks=(d.chunks||[]).map((c,i)=>({id:c.id||i, tema:c.tema||"", texto:c.texto||"", src:c.src||"(publicado)"}));
+  KB.fuentes=d.fuentes||[];
+  KB.meta=d; KB.local=!!local; KB.listo=KB.chunks.length>0; kbInfo();
+}
 function kbBuscar(q,n=4){
   if(!KB.listo) return [];
   const ts=norm(q).split(/\W+/).filter(t=>t.length>3);
@@ -806,13 +852,206 @@ function kbBuscar(q,n=4){
     .filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,n).map(x=>x.c);
 }
 function kbInfo(){ const e=$("kb-info"); if(!e) return;
-  e.innerHTML = KB.listo ? `✅ <b>${KB.chunks.length} fragmentos</b> cargados. Lo que la app genere se anclará en ellos.`
+  e.innerHTML = KB.listo
+    ? `✅ <b>${KB.chunks.length} fragmentos</b> de ${KB.fuentes.length||1} fuente(s)${KB.local?" · construida en este navegador":" · publicada con la app"}. Todo lo que genere la IA se anclará en ellos.`
     : `⚠️ No hay base verificada. La IA responderá de conocimiento general y puede equivocarse en artículos, cifras y nombres de órganos.`;
 }
+
+/* almacén local: IndexedDB, porque una compilación normativa no cabe en localStorage */
+function idb(){ return new Promise((ok,err)=>{ const r=indexedDB.open("rutadigital",1);
+  r.onupgradeneeded=()=>r.result.createObjectStore("kb");
+  r.onsuccess=()=>ok(r.result); r.onerror=()=>err(r.error); }); }
+async function idbSet(k,v){ const db=await idb(); return new Promise((ok,err)=>{
+  const t=db.transaction("kb","readwrite"); t.objectStore("kb").put(v,k);
+  t.oncomplete=()=>ok(); t.onerror=()=>err(t.error); }); }
+async function idbGet(k){ const db=await idb(); return new Promise((ok,err)=>{
+  const t=db.transaction("kb","readonly"), q=t.objectStore("kb").get(k);
+  q.onsuccess=()=>ok(q.result); q.onerror=()=>err(q.error); }); }
+async function kbGuardarLocal(){
+  try{ await idbSet("base",{fuentes:KB.fuentes,chunks:KB.chunks}); }
+  catch(e){ toast("No se pudo guardar la base en este navegador: "+e.message); }
+}
 (async function cargarKB(){
-  try{ const r=await fetch("conocimiento.json",{cache:"no-cache"}); if(!r.ok) throw 0; kbBuild(await r.json()); }
+  try{ const local=await idbGet("base");
+       if(local&&local.chunks&&local.chunks.length){ kbBuild(local,true); return; } }catch(e){}
+  try{ const r=await fetch("conocimiento.json",{cache:"no-cache"}); if(!r.ok) throw 0; kbBuild(await r.json(),false); }
   catch(e){ kbInfo(); }
 })();
+
+/* ============================================================
+   TALLER: subir normativa y construir la base en el navegador
+   ============================================================ */
+const MAX_PALABRAS=320, MIN_PALABRAS=25;
+const RE_ART=/(?:^|\n)[ \t]*(?:Art[íi]culo|Art\.)[ \t]+(\d+ ?(?:bis|ter|qu[aá]ter)?)[ \t]*[.\-–—:]?/gi;
+
+async function cargarPdfJs(){
+  if(window.pdfjsLib) return window.pdfjsLib;
+  await new Promise((ok,err)=>{
+    const t=document.createElement("script");
+    t.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+    t.onload=ok; t.onerror=()=>err(new Error("No se pudo cargar el lector de PDF. ¿Hay conexión?"));
+    document.head.appendChild(t);
+  });
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  return window.pdfjsLib;
+}
+async function textoDePdf(file,aviso){
+  const lib=await cargarPdfJs();
+  const doc=await lib.getDocument({data:await file.arrayBuffer()}).promise;
+  const paginas=[];
+  for(let i=1;i<=doc.numPages;i++){
+    aviso&&aviso(`leyendo página ${i} de ${doc.numPages}`);
+    const tc=await (await doc.getPage(i)).getTextContent();
+    let linea="", lineas=[];
+    tc.items.forEach(it=>{ linea+=it.str; if(it.hasEOL){ lineas.push(linea); linea=""; } else linea+=" "; });
+    if(linea) lineas.push(linea);
+    paginas.push(lineas.join("\n"));
+  }
+  return paginas.join("\n");
+}
+function kbLimpiar(t){
+  return String(t).replace(/\u00ad/g,"")
+    .replace(/(\w)-\n(\w)/g,"$1$2")
+    .replace(/[ \t]+/g," ")
+    .replace(/\n\s*\d{1,4}\s*\n/g,"\n")
+    .replace(/\n{3,}/g,"\n\n").trim();
+}
+function partirLargo(texto){
+  const fuera=[]; let act=[];
+  texto.split("\n").forEach(p=>{
+    if(!p.trim()) return;
+    if(act.length && (act.join(" ")+" "+p).split(/\s+/).length>MAX_PALABRAS){ fuera.push(act.join("\n")); act=[]; }
+    act.push(p);
+  });
+  if(act.length) fuera.push(act.join("\n"));
+  return fuera;
+}
+function kbTrocear(texto){
+  const marcas=[...texto.matchAll(RE_ART)];
+  if(marcas.length<3) return partirLargo(texto).map(p=>["",p]);
+  const salida=[];
+  marcas.forEach((m,i)=>{
+    const ini=m.index+(m[0].startsWith("\n")?1:0);
+    const fin=(i+1<marcas.length)?marcas[i+1].index:texto.length;
+    const et="art. "+m[1].trim();
+    const partes=partirLargo(texto.slice(ini,fin).trim());
+    partes.forEach((p,j)=>salida.push([partes.length>1?`${et} (${j+1}/${partes.length})`:et,p]));
+  });
+  return salida;
+}
+function slug(x){ return norm(x).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40); }
+
+async function procesarArchivos(files){
+  const prog=$("kb-progreso");
+  for(const f of files){
+    prog.innerHTML=`<div class="cargando"><span class="spin"></span> <b>${esc(f.name)}</b> — <span id="kb-p">abriendo…</span></div>`;
+    try{
+      const ext=f.name.split(".").pop().toLowerCase();
+      let crudo="";
+      if(ext==="pdf") crudo=await textoDePdf(f,m=>{ const e=$("kb-p"); if(e) e.textContent=m; });
+      else crudo=await f.text();
+      const texto=kbLimpiar(crudo);
+      const palabras=texto.split(/\s+/).filter(Boolean).length;
+      if(palabras<80){
+        prog.innerHTML=`<div class="fb consec"><b>${esc(f.name)} no tiene texto extraíble.</b> Casi con seguridad es un PDF escaneado: son imágenes de páginas, no texto. Necesita pasarle un OCR antes, o usar el script <span class="mono">construir_conocimiento.py</span> del repositorio.</div>`;
+        continue;
+      }
+      const nombre=f.name.replace(/\.[^.]+$/,"").replace(/_+/g," ").trim();
+      const src=slug(nombre)+"-"+Date.now().toString(36).slice(-4);
+      let n=0;
+      kbTrocear(texto).forEach(([et,cuerpo])=>{
+        if(cuerpo.split(/\s+/).length<MIN_PALABRAS) return;
+        n++;
+        KB.chunks.push({id:`${slug(nombre)}-${String(n).padStart(3,"0")}`, tema:[nombre,et].filter(Boolean).join(" · "), texto:cuerpo, src});
+      });
+      KB.fuentes.push({src, nombre, archivo:f.name, claves:"", n, palabras, fecha:new Date().toLocaleDateString("es-DO")});
+      KB.listo=KB.chunks.length>0;
+      prog.innerHTML=`<div class="fb"><b>${esc(f.name)}</b>: ${n} fragmentos, ${palabras.toLocaleString("es-DO")} palabras. ${marcaArt(texto)}</div>`;
+    }catch(e){
+      prog.innerHTML=`<div class="fb consec"><b>${esc(f.name)}</b>: ${esc(e.message)}</div>`;
+    }
+  }
+  await kbGuardarLocal(); kbInfo(); pintarTaller();
+}
+function marcaArt(t){ const n=[...t.matchAll(RE_ART)].length; return n>=3?`Troceado por artículo (${n} detectados).`:"Sin artículos detectables: troceado por párrafos."; }
+
+/* recalcula el tema de los fragmentos de una fuente al cambiar sus claves */
+function aplicarClaves(src,claves){
+  const f=KB.fuentes.find(x=>x.src===src); if(!f) return;
+  f.claves=claves;
+  KB.chunks.filter(c=>c.src===src).forEach(c=>{
+    const base=c.tema.split(" · ").slice(0,2).join(" · ");
+    c.tema=[base,claves].filter(Boolean).join(" · ");
+  });
+  kbGuardarLocal(); pintarCobertura();
+}
+function borrarFuente(src){
+  KB.chunks=KB.chunks.filter(c=>c.src!==src);
+  KB.fuentes=KB.fuentes.filter(f=>f.src!==src);
+  KB.listo=KB.chunks.length>0;
+  kbGuardarLocal(); kbInfo(); pintarTaller();
+}
+/* vocabulario real con el que la app interroga a la base */
+function vocabularioApp(){
+  const v=[]; ORDEN_ROLES.forEach(r=>ROLES[r].mods.forEach(m=>v.push(m.t+": "+m.f)));
+  return v.join("\n");
+}
+async function sugerirClaves(src){
+  const f=KB.fuentes.find(x=>x.src===src); if(!f) return;
+  const cont=$("cl-"+src); const antes=cont.value;
+  cont.value="pensando…"; cont.disabled=true;
+  try{
+    const muestra=KB.chunks.filter(c=>c.src===src).slice(0,6).map(c=>c.texto).join("\n").slice(0,3000);
+    const out=await llamar([
+      {role:"system",content:"Devuelves solo una lista de palabras clave separadas por espacios, sin comas, sin explicaciones, sin numerar."},
+      {role:"user",content:`Esta aplicación busca en su base de conocimiento concatenando el título y el foco de un módulo. Estos son sus módulos:\n${vocabularioApp()}\n\nEste es un extracto del documento "${f.nombre}":\n"""\n${muestra}\n"""\n\nDevuelve entre 12 y 20 palabras clave, en minúsculas y en español, que hagan que este documento se recupere cuando la aplicación pregunte por los módulos a los que realmente sirve. Usa el vocabulario de los módulos, no el del documento. No inventes materias que el documento no trate.`}
+    ],{temp:0.3});
+    cont.disabled=false; cont.value=out.replace(/[\n,]+/g," ").replace(/\s+/g," ").trim();
+    aplicarClaves(src,cont.value);
+    toast("Revise las claves antes de darlas por buenas.");
+  }catch(e){ cont.disabled=false; cont.value=antes; toast(String(e.message).includes("SIN_CLAVE")?"Necesita su clave de OpenAI para esto.":e.message); }
+}
+
+function pintarTaller(){ pintarFuentes(); pintarCobertura(); }
+function pintarFuentes(){
+  const c=$("kb-fuentes"); if(!c) return;
+  if(!KB.fuentes.length){
+    c.innerHTML = KB.listo
+      ? `<div class="nota" style="margin-top:14px">Hay ${KB.chunks.length} fragmentos cargados desde un <span class="mono">conocimiento.json</span>, sin desglose por fuente. Si sube documentos aquí se añadirán a esa base.</div>`
+      : `<div class="nota" style="margin-top:14px">Todavía no hay ninguna fuente.</div>`;
+    return;
+  }
+  c.innerHTML=`<h3 style="margin-top:20px">Fuentes cargadas</h3>`+KB.fuentes.map(f=>`
+    <div class="fuente">
+      <div class="fn">${esc(f.nombre)}
+        <button class="btn claro sm" style="margin-left:auto" onclick="borrarFuente('${f.src}')">Quitar</button></div>
+      <div class="fm">${esc(f.archivo)} · ${f.n} fragmentos · ${f.palabras.toLocaleString("es-DO")} palabras · añadida el ${esc(f.fecha)}</div>
+      <input id="cl-${f.src}" value="${esc(f.claves)}" placeholder="palabras clave con las que debe recuperarse: conservación datos tráfico plazo cadena de custodia…"
+        onchange="aplicarClaves('${f.src}',this.value)">
+      <div style="display:flex;gap:7px;margin-top:7px;flex-wrap:wrap">
+        <button class="btn claro sm" onclick="sugerirClaves('${f.src}')">✨ Sugerir claves con la IA</button>
+        ${f.claves?"":'<span class="aviso-ver">⚠ Sin claves este documento casi no se recuperará</span>'}
+      </div>
+    </div>`).join("");
+}
+function pintarCobertura(){
+  const c=$("kb-cobertura"); if(!c) return;
+  if(!KB.listo){ c.innerHTML=""; return; }
+  const filas=ORDEN_ROLES.map(r=>{
+    const mods=ROLES[r].mods, con=mods.filter(m=>kbBuscar(m.t+" "+m.f,1).length>0).length;
+    return {r,con,tot:mods.length};
+  });
+  const huerfanos=KB.chunks.filter(ch=>{
+    return !ORDEN_ROLES.some(r=>ROLES[r].mods.some(m=>kbBuscar(m.t+" "+m.f,4).some(h=>h.id===ch.id)));
+  }).length;
+  c.innerHTML=`<h3 style="margin-top:22px">Cobertura de los módulos</h3>
+    <p class="nota">Cuántos módulos de cada ruta encuentran algo en la base. Un cero no significa que el documento esté mal: significa que sus palabras clave no coinciden con la forma en que la app pregunta.</p>
+    <div class="cob">${filas.map(f=>`
+      <div class="cobr ${f.con?"":"vacio"}"><div class="cn">${ROLES[f.r].ic} ${esc(ROLES[f.r].nm)}</div>
+      <div class="fm" style="font-family:'Space Mono';font-size:11px">${f.con} de ${f.tot} módulos</div>
+      <div class="cb"><i style="width:${f.con/f.tot*100}%"></i></div></div>`).join("")}</div>
+    ${huerfanos?`<div class="nota" style="margin-top:9px">${huerfanos} de ${KB.chunks.length} fragmentos no salen en ninguna búsqueda. Suelen ser preámbulos y disposiciones finales; si son artículos de fondo, revise las claves de su fuente.</div>`:""}`;
+}
 
 /* ---------- contexto común de los prompts ---------- */
 function reglasNivel(n){
@@ -1414,9 +1653,31 @@ $("btn-borrar").onclick=()=>{
 $("btn-load-kb").onclick=()=>$("kb-file").click();
 $("kb-file").addEventListener("change",e=>{
   const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=()=>{ try{ kbBuild(JSON.parse(r.result)); toast("Base de conocimiento cargada."); }catch(err){ toast("Formato no reconocido."); } };
+  r.onload=async()=>{ try{ kbBuild(JSON.parse(r.result),true); await kbGuardarLocal(); pintarTaller(); toast("Base de conocimiento cargada."); }
+                      catch(err){ toast("Formato no reconocido."); } };
   r.readAsText(f);
 });
+/* --- taller --- */
+$("btn-taller").onclick=()=>{ cerrar("ov-cfg"); pintarTaller(); abrir("ov-kb"); };
+$("soltar").onclick=()=>$("kb-archivos").click();
+$("kb-archivos").addEventListener("change",e=>{ if(e.target.files.length) procesarArchivos([...e.target.files]); e.target.value=""; });
+["dragenter","dragover"].forEach(ev=>$("soltar").addEventListener(ev,e=>{ e.preventDefault(); $("soltar").classList.add("sobre"); }));
+["dragleave","drop"].forEach(ev=>$("soltar").addEventListener(ev,e=>{ e.preventDefault(); $("soltar").classList.remove("sobre"); }));
+$("soltar").addEventListener("drop",e=>{ const f=[...(e.dataTransfer.files||[])]; if(f.length) procesarArchivos(f); });
+$("btn-kb-export").onclick=()=>{
+  if(!KB.listo) return toast("La base está vacía.");
+  const d={fuente:"Compilación normativa verificada — Ruta Digital",
+           generado:new Date().toISOString().slice(0,10),
+           aviso:"Textos que deben haber sido verificados contra la fuente oficial antes de incluirse aquí.",
+           fuentes:KB.fuentes, chunks:KB.chunks};
+  const b=new Blob([JSON.stringify(d,null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="conocimiento.json"; a.click();
+};
+$("btn-kb-vaciar").onclick=async()=>{
+  if(!confirm("Se borrará la base construida en este navegador. ¿Continuar?")) return;
+  KB.chunks=[]; KB.fuentes=[]; KB.listo=false; KB.local=false;
+  await kbGuardarLocal(); kbInfo(); pintarTaller(); toast("Base vaciada.");
+};
 function pintarClave(){ $("btn-cfg").classList.toggle("key-missing",!getKey()); }
 
 /* ============================ ARRANQUE ============================ */
