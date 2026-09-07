@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="es-DO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ruta Digital · Delitos de alta tecnología en la República Dominicana</title>
+<meta name="description" content="Simulación formativa gratuita sobre investigación y persecución de los delitos de alta tecnología en la República Dominicana. Siete roles, un mismo caso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --papel:#F4F2ED; --tinta:#101820; --azul:#12395E; --azul-dk:#0B2740;
+  --rojo:#C1272D; --sello:#D9A441; --verde:#2E6B4F; --gris:#6A7480;
+  --card:#FFFFFF; --off:#D8D4CA; --sombra:0 2px 0 var(--tinta);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--papel);color:var(--tinta);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;font-size:15px}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+:focus-visible{outline:3px solid var(--rojo);outline-offset:2px}
+.mono{font-family:'Space Mono',monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+
+/* ---------- CABECERA ---------- */
+header{position:sticky;top:0;z-index:40;background:var(--azul);color:var(--papel);border-bottom:3px solid var(--tinta)}
+.hbar{display:flex;align-items:center;gap:12px;padding:11px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:9px;margin-right:auto}
+.brand .logo{font-family:'Fraunces';font-weight:900;font-size:25px;letter-spacing:-.6px;color:var(--papel)}
+.brand .logo em{font-style:normal;color:var(--sello)}
+.brand .pais{font-size:11px;font-weight:700;letter-spacing:.4px;color:#9DB4C9}
+.hbtn{background:var(--azul-dk);color:var(--papel);border:2px solid var(--tinta);border-radius:9px;padding:6px 11px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px}
+.hbtn.on{background:var(--sello);color:var(--tinta)}
+.hbtn.key-missing{background:var(--rojo);color:#fff}
+#buscador-top{flex:1;min-width:180px;max-width:340px;position:relative}
+#buscador-top input{width:100%;background:#fff;border:2px solid var(--tinta);border-radius:9px;padding:7px 11px;font-size:13.5px}
+
+/* ---------- RELOJ 90 DÍAS ---------- */
+.reloj{background:var(--azul-dk);border-bottom:3px solid var(--tinta);padding:10px 0;color:var(--papel)}
+.reloj-in{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.reloj-lab{font-size:11.5px;font-weight:700;letter-spacing:.3px;color:#9DB4C9;flex:none}
+.reloj-lab b{color:var(--papel);display:block;font-size:13px;letter-spacing:0}
+.barra{flex:1;min-width:220px;height:26px;background:#0A1D2E;border:2px solid var(--tinta);border-radius:6px;position:relative;overflow:hidden}
+.barra .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--verde),var(--sello));width:0%;transition:width .5s ease}
+.barra .fill.tarde{background:var(--rojo)}
+.barra .marca{position:absolute;top:0;bottom:0;width:2px;background:var(--papel);opacity:.35}
+.barra .dia{position:absolute;top:50%;transform:translate(-50%,-50%);font-family:'Space Mono';font-weight:700;font-size:12px;background:var(--papel);color:var(--tinta);border:2px solid var(--tinta);border-radius:5px;padding:1px 6px;transition:left .5s ease;white-space:nowrap}
+.reloj-est{font-family:'Space Mono';font-size:12px;font-weight:700;flex:none}
+.reloj-est.vivo{color:var(--sello)} .reloj-est.muerto{color:#FF9A93}
+
+/* ---------- SECCIONES ---------- */
+main{padding:26px 0 70px}
+.vista{display:none} .vista.on{display:block}
+h1{font-family:'Fraunces';font-weight:900;font-size:clamp(28px,5vw,42px);letter-spacing:-1px;line-height:1.05}
+h2{font-family:'Fraunces';font-weight:900;font-size:23px;letter-spacing:-.5px;margin-bottom:4px}
+h3{font-family:'Fraunces';font-weight:700;font-size:18px;letter-spacing:-.3px}
+.lede{color:var(--gris);max-width:64ch;margin-top:11px;font-size:15.5px}
+.sep{height:3px;background:var(--tinta);opacity:.12;margin:26px 0}
+
+.grid2{display:grid;grid-template-columns:1fr 320px;gap:26px;align-items:start}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:2.5px solid var(--tinta);border-radius:14px;padding:16px 18px;box-shadow:var(--sombra)}
+.card+.card{margin-top:14px}
+.card.plano{box-shadow:none;border-width:2px}
+
+/* siguiente paso */
+.paso{background:var(--sello);border:2.5px solid var(--tinta);border-radius:14px;padding:13px 16px;box-shadow:var(--sombra);display:flex;gap:13px;align-items:center;flex-wrap:wrap}
+.paso .txt{flex:1;min-width:180px}
+.paso .txt small{display:block;font-size:11.5px;font-weight:700;color:#6B5417}
+.paso .txt b{font-size:15px}
+.btn{background:var(--azul);color:var(--papel);border:2.5px solid var(--tinta);border-radius:10px;padding:9px 15px;font-weight:700;font-size:14px;box-shadow:var(--sombra)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--tinta)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--sombra)}
+.btn.claro{background:#fff;color:var(--tinta)}
+.btn.sello{background:var(--sello);color:var(--tinta)}
+.btn.rojo{background:var(--rojo);color:#fff}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-width:2px}
+
+/* roles */
+.roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:13px;margin-top:16px}
+.rol{background:var(--card);border:2.5px solid var(--tinta);border-radius:14px;padding:14px;box-shadow:var(--sombra);text-align:left;display:flex;gap:12px;align-items:flex-start;transition:transform .12s}
+.rol:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--tinta)}
+.rol .ic{width:44px;height:44px;flex:none;border:2px solid var(--tinta);border-radius:11px;background:var(--azul);color:var(--papel);display:flex;align-items:center;justify-content:center;font-size:21px}
+.rol.activo .ic{background:var(--sello);color:var(--tinta)}
+.rol .nm{font-family:'Fraunces';font-weight:900;font-size:16.5px;letter-spacing:-.3px}
+.rol .sb{font-size:12px;color:var(--gris);margin-top:1px}
+.rol .cm{font-size:12.5px;margin-top:7px;line-height:1.4}
+.rol .pr{font-family:'Space Mono';font-size:11px;font-weight:700;margin-top:8px;color:var(--azul)}
+.prioritario{border-color:var(--rojo);border-width:3px}
+.tag-prio{display:inline-block;background:var(--rojo);color:#fff;font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+
+/* módulos */
+.mod{background:var(--card);border:2.5px solid var(--tinta);border-radius:13px;padding:13px 15px;box-shadow:var(--sombra);display:grid;grid-template-columns:44px 1fr auto;gap:13px;align-items:center;margin-bottom:11px;text-align:left;width:100%}
+.mod:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--tinta)}
+.mod .num{width:44px;height:44px;border:2px solid var(--tinta);border-radius:10px;background:var(--azul);color:var(--papel);font-family:'Fraunces';font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center}
+.mod.hecho .num{background:var(--verde);color:#fff}
+.mod .tt{font-weight:700;font-size:15px;line-height:1.3}
+.mod .fc{font-size:12.5px;color:var(--gris);margin-top:2px}
+.mod .estrellas{font-size:15px;letter-spacing:1px;color:var(--off);flex:none}
+.mod .estrellas .on{color:var(--sello)}
+.mod.entregable{border-style:dashed;background:#FBF8F0}
+
+/* expediente lateral */
+.exp{background:#fff;border:3px solid var(--tinta);border-radius:4px;padding:13px 15px;font-family:'Space Mono',monospace;font-size:12px}
+.exp .ttl{font-family:'Fraunces';font-weight:900;font-size:21px;letter-spacing:-.5px;border-bottom:8px solid var(--tinta);padding-bottom:2px;line-height:1;margin-bottom:6px}
+.exp .fila{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--tinta);padding:5px 0}
+.exp .fila b{font-weight:700}
+.exp .tot{display:flex;justify-content:space-between;border-top:6px solid var(--tinta);border-bottom:2px solid var(--tinta);padding:6px 0;font-weight:700;margin-top:3px}
+.medidor{height:7px;background:#EDEBE2;border:1px solid var(--tinta);border-radius:2px;margin-top:5px;overflow:hidden}
+.medidor i{display:block;height:100%;background:var(--azul)}
+
+/* pipeline */
+.pipe{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+.pstep{display:flex;gap:9px;align-items:center;font-size:12.5px;color:var(--gris);padding:3px 0}
+.pstep .pt{width:9px;height:9px;border-radius:50%;background:var(--off);border:1.5px solid var(--tinta);flex:none}
+.pstep.act{color:var(--tinta);font-weight:700}
+.pstep.act .pt{background:var(--sello);animation:lat 1s infinite}
+.pstep.fin .pt{background:var(--verde)}
+@keyframes lat{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* modales */
+.overlay{position:fixed;inset:0;background:rgba(16,24,32,.62);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}
+.overlay.on{display:flex}
+.modal{background:var(--papel);border:3px solid var(--tinta);border-radius:16px;max-width:760px;width:100%;max-height:92vh;overflow:auto;box-shadow:6px 6px 0 var(--tinta)}
+.modal.ancho{max-width:960px}
+.mhead{position:sticky;top:0;background:var(--azul);color:var(--papel);border-bottom:3px solid var(--tinta);padding:14px 18px;display:flex;align-items:center;gap:11px;z-index:2}
+.mhead h3{color:var(--papel);flex:1;font-size:17px}
+.mhead .x{background:var(--sello);color:var(--tinta);border:2px solid var(--tinta);border-radius:8px;width:32px;height:32px;font-weight:900;font-size:17px;flex:none}
+.mbody{padding:18px}
+
+/* retos */
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}
+.tabs button{flex:1;min-width:150px;background:#fff;border:2.5px solid var(--tinta);border-radius:12px;padding:10px 11px;text-align:left;box-shadow:var(--sombra)}
+.tabs button.sel{background:var(--sello)}
+.tabs button .lb{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px}
+.tabs button .ds{font-size:11.5px;color:var(--gris);margin-top:2px}
+.tabs button.sel .ds{color:#6B5417}
+
+.qcard{background:#fff;border:2.5px solid var(--tinta);border-radius:13px;padding:16px;margin-bottom:13px;box-shadow:var(--sombra)}
+.qcard .qn{font-family:'Space Mono';font-size:11px;font-weight:700;color:var(--gris)}
+.qcard .qt{font-weight:600;margin:5px 0 11px;font-size:14.8px}
+.opt{display:block;width:100%;text-align:left;background:var(--papel);border:2px solid var(--tinta);border-radius:9px;padding:10px 13px;margin-bottom:8px;font-size:14px}
+.opt:hover:not(:disabled){background:#EDEAE2}
+.opt.ok{background:#CFE7DA;border-color:var(--verde);font-weight:700}
+.opt.mal{background:#F2CFCD;border-color:var(--rojo)}
+.opt:disabled{cursor:default}
+.fb{background:#fff;border:2px solid var(--tinta);border-left-width:6px;border-left-color:var(--azul);border-radius:9px;padding:11px 13px;margin-top:9px;font-size:13.5px}
+.fb.consec{border-left-color:var(--rojo);background:#FDF4F3}
+.fb b{color:var(--azul)}
+.fb.consec b{color:var(--rojo)}
+textarea.resp{width:100%;min-height:170px;background:#fff;border:2.5px solid var(--tinta);border-radius:11px;padding:12px;font-size:14px;line-height:1.6;resize:vertical}
+.punt{font-family:'Fraunces';font-weight:900;font-size:34px;letter-spacing:-1px}
+.simple{background:#fff;border:2px dashed var(--tinta);border-radius:10px;padding:11px 13px;margin-top:9px;font-size:13.5px}
+
+/* biblioteca */
+.fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:14px}
+.ficha{background:var(--card);border:2.5px solid var(--tinta);border-radius:13px;padding:13px 15px;box-shadow:var(--sombra);text-align:left}
+.ficha:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--tinta)}
+.ficha .tp{font-family:'Space Mono';font-size:10.5px;font-weight:700;border:1.5px solid var(--tinta);border-radius:20px;padding:1px 8px;display:inline-block}
+.tp.rd{background:var(--azul);color:var(--papel)} .tp.int{background:var(--sello)}
+.tp.tec{background:#E2E8ED} .tp.cmp{background:#DCE9E1}
+.ficha .ft{font-family:'Fraunces';font-weight:900;font-size:16px;margin-top:7px;letter-spacing:-.3px}
+.ficha .fs{font-size:12.5px;color:var(--gris);margin-top:1px}
+.ficha .f1{font-size:13px;margin-top:8px}
+.aviso-ver{font-size:11px;font-weight:700;color:var(--rojo);margin-top:8px;display:flex;gap:5px;align-items:center}
+.capas{display:flex;gap:7px;margin:13px 0}
+.capas button{flex:1;border:2px solid var(--tinta);border-radius:9px;padding:7px;font-size:12.5px;font-weight:700;background:#fff}
+.capas button.sel{background:var(--azul);color:var(--papel)}
+
+/* glosario / término */
+.term{border-bottom:2px dotted var(--azul);cursor:help;font-weight:600}
+.filtros{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.filtros button{border:2px solid var(--tinta);border-radius:20px;padding:5px 12px;font-size:12.5px;font-weight:700;background:#fff}
+.filtros button.sel{background:var(--tinta);color:var(--papel)}
+
+/* resultados búsqueda */
+.res{background:#fff;border:2px solid var(--tinta);border-radius:10px;padding:11px 13px;margin-bottom:9px;text-align:left;width:100%;box-shadow:var(--sombra)}
+.res .rt{font-weight:700;font-size:14px}
+.res .rm{font-size:11.5px;color:var(--gris);font-family:'Space Mono'}
+
+/* diagnóstico */
+.dim{display:grid;grid-template-columns:1fr;gap:11px;margin-top:14px}
+.dimc{background:#fff;border:2.5px solid var(--tinta);border-radius:12px;padding:13px 15px;box-shadow:var(--sombra)}
+.dimc .dn{font-weight:700;font-size:14.5px}
+.dimc .dl{font-family:'Fraunces';font-weight:900;font-size:19px;color:var(--azul);margin-top:3px}
+.nivelbadge{display:inline-block;background:var(--azul);color:var(--papel);border:2px solid var(--tinta);border-radius:20px;padding:3px 12px;font-size:12.5px;font-weight:700}
+
+/* chat asistente */
+.chat{max-height:46vh;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.msg{border:2px solid var(--tinta);border-radius:11px;padding:10px 13px;font-size:13.8px;max-width:88%}
+.msg.u{background:var(--azul);color:var(--papel);align-self:flex-end;border-bottom-right-radius:3px}
+.msg.a{background:#fff;align-self:flex-start;border-bottom-left-radius:3px}
+.chat-in{display:flex;gap:8px;margin-top:12px}
+.chat-in input{flex:1;background:#fff;border:2.5px solid var(--tinta);border-radius:10px;padding:10px 13px}
+
+/* ajustes */
+.campo{margin-bottom:16px}
+.campo label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.campo input,.campo select{width:100%;background:#fff;border:2.5px solid var(--tinta);border-radius:10px;padding:10px 12px}
+.nota{font-size:12px;color:var(--gris);margin-top:5px;line-height:1.45}
+
+/* varios */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--tinta);color:var(--papel);border-radius:10px;padding:10px 18px;font-size:13.5px;font-weight:600;z-index:90;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.on{opacity:1}
+.spin{display:inline-block;width:15px;height:15px;border:2.5px solid var(--off);border-top-color:var(--azul);border-radius:50%;animation:gir .7s linear infinite;vertical-align:-2px}
+@keyframes gir{to{transform:rotate(360deg)}}
+.cargando{text-align:center;padding:34px 16px;color:var(--gris);font-size:14px}
+footer{border-top:3px solid var(--tinta);background:var(--azul-dk);color:#9DB4C9;padding:24px 0;font-size:12.8px}
+footer a{color:var(--sello)}
+footer b{color:var(--papel)}
+.legal{background:#FBF4F3;border:2px solid var(--rojo);border-radius:11px;padding:12px 14px;font-size:12.8px;margin-top:14px}
+.constancia{background:#fff;border:3px double var(--tinta);border-radius:6px;padding:22px;text-align:center}
+.constancia .cod{font-family:'Space Mono';font-weight:700;font-size:15px;letter-spacing:1px;background:var(--papel);border:2px solid var(--tinta);border-radius:6px;padding:6px 12px;display:inline-block;margin-top:10px}
+@media print{header,.reloj,footer,.btn,.overlay{display:none!important}}
+ul.li{margin:8px 0 0 20px} ul.li li{margin-bottom:5px;font-size:13.8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <div class="brand">
+      <span class="logo">Ruta <em>Digital</em></span>
+      <span class="pais">República Dominicana · Ley 53-07</span>
+    </div>
+    <div id="buscador-top"><input id="q-top" type="search" placeholder="Buscar: cadena de custodia rota, hash, 90 días…" aria-label="Buscar en toda la aplicación"></div>
+    <button class="hbtn" id="btn-biblio">📚 Biblioteca</button>
+    <button class="hbtn" id="btn-asist">💬 Preguntar</button>
+    <button class="hbtn" id="btn-cfg">⚙ Ajustes</button>
+  </div>
+</header>
+
+<div class="reloj">
+  <div class="wrap reloj-in">
+    <div class="reloj-lab">EL RELOJ DEL EXPEDIENTE<b>Art. 56 Ley 53-07 · conservación mínima de datos</b></div>
+    <div class="barra" id="barra" title="Días transcurridos desde el hecho sobre el plazo mínimo de conservación">
+      <div class="fill" id="barra-fill"></div>
+      <div class="marca" style="left:33.3%"></div><div class="marca" style="left:66.6%"></div>
+      <div class="dia" id="barra-dia">día 0</div>
+    </div>
+    <div class="reloj-est vivo" id="reloj-est">datos vivos</div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ============ INICIO ============ -->
+<section class="vista on" id="v-inicio">
+  <h1>Un caso. Siete sillas.<br>La prueba se gana o se pierde<br>en las primeras horas.</h1>
+  <p class="lede">Ruta Digital no es un curso de derecho informático en abstracto. Es la simulación de un caso real de alta tecnología que usted recorre paso a paso, desde el asiento que efectivamente ocupa. Sin cuenta, sin registro, sin costo de plataforma: su progreso vive en este navegador y nada sale de su equipo salvo lo que va a la API de OpenAI.</p>
+
+  <div id="retomar" style="margin-top:18px"></div>
+
+  <div class="paso" style="margin-top:18px" id="paso-inicio">
+    <div class="txt"><small>SIGUIENTE PASO</small><b id="paso-txt">Configure su clave y haga el diagnóstico de entrada</b></div>
+    <button class="btn" id="paso-btn">Empezar</button>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>El caso</h2>
+  <div class="grid2" style="margin-top:12px">
+    <div>
+      <div class="card">
+        <h3 id="caso-tt">Cuenta espejo</h3>
+        <p style="margin-top:8px;font-size:14.5px" id="caso-res"></p>
+        <div id="caso-hitos" style="margin-top:14px"></div>
+      </div>
+    </div>
+    <div>
+      <div class="exp">
+        <div class="ttl">EXPEDIENTE</div>
+        <div class="fila"><span>Caso</span><b id="e-caso">—</b></div>
+        <div class="fila"><span>Día del expediente</span><b id="e-dia">—</b></div>
+        <div class="fila"><span>Su rol</span><b id="e-rol">sin asignar</b></div>
+        <div class="fila"><span>Nivel diagnosticado</span><b id="e-nivel">sin medir</b></div>
+        <div class="fila"><span>Módulos superados</span><b id="e-mods">0</b></div>
+        <div style="padding:7px 0 3px"><span>Avance de su ruta</span><div class="medidor"><i id="e-med" style="width:0%"></i></div></div>
+        <div class="tot"><span>DECISIONES</span><span id="e-dec">0</span></div>
+      </div>
+      <div class="card plano" style="margin-top:13px">
+        <div style="font-weight:700;font-size:13px;margin-bottom:5px">Pipeline del reto</div>
+        <div class="pipe">
+          <div class="pstep" data-ag="biblio"><span class="pt"></span>Consulta la biblioteca</div>
+          <div class="pstep" data-ag="gen"><span class="pt"></span>Construye el reto sobre el caso</div>
+          <div class="pstep" data-ag="ev"><span class="pt"></span>Evalúa su decisión</div>
+          <div class="pstep" data-ag="cons"><span class="pt"></span>Calcula la consecuencia procesal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h2>Elija su silla <span class="tag-prio" style="background:var(--azul)">7 rutas</span></h2>
+  <p class="lede">Formar a un solo perfil no resuelve el problema: la prueba se rompe en el eslabón menos visible. Las rutas marcadas en rojo son las que suelen quedar fuera de toda formación institucional.</p>
+  <div class="roles" id="roles"></div>
+
+  <div class="legal">
+    <b>Lo que esta aplicación no es.</b> No es asesoría legal ni sustituye el criterio profesional de quien la usa. No certifica la aptitud de nadie ni otorga habilitación oficial alguna. Los contenidos normativos deben verificarse en fuente oficial antes de emplearse en un caso real: cada ficha de la biblioteca indica su estado de verificación.
+  </div>
+</section>
+
+<!-- ============ DIAGNÓSTICO ============ -->
+<section class="vista" id="v-diag">
+  <button class="btn claro sm" onclick="ir('inicio')">← Volver</button>
+  <h1 style="margin-top:14px;font-size:clamp(25px,4vw,34px)">Diagnóstico de entrada</h1>
+  <p class="lede">Dieciocho ítems de aplicación en tres dimensiones. No se aprueba ni se reprueba: solo ubica. El sistema deja de subir dificultad en la dimensión donde usted falla dos ítems seguidos, y afina la medición en el rango inferior. Diez a quince minutos.</p>
+  <div id="diag-panel" style="margin-top:20px"></div>
+</section>
+
+<!-- ============ RUTA ============ -->
+<section class="vista" id="v-ruta">
+  <button class="btn claro sm" onclick="ir('inicio')">← Volver al mapa</button>
+  <div class="grid2" style="margin-top:16px">
+    <div>
+      <h1 id="ruta-nm" style="font-size:clamp(25px,4vw,34px)">Ruta</h1>
+      <p class="lede" id="ruta-cm"></p>
+      <div class="paso" style="margin:18px 0" id="paso-ruta">
+        <div class="txt"><small>SIGUIENTE PASO</small><b id="paso-ruta-txt">—</b></div>
+        <button class="btn" id="paso-ruta-btn">Ir</button>
+      </div>
+      <div id="ruta-mods"></div>
+    </div>
+    <div>
+      <div class="card plano">
+        <div style="font-weight:700;font-size:13.5px">Su nivel en esta ruta</div>
+        <div id="ruta-niveles" style="margin-top:8px"></div>
+        <div class="nota">El nivel ajusta la profundidad, el lenguaje y el ritmo de cada reto. Puede volver a medirlo desde Ajustes.</div>
+      </div>
+      <div class="card plano" style="margin-top:13px">
+        <div style="font-weight:700;font-size:13.5px">Vista cruzada</div>
+        <div class="nota" style="margin-top:4px">Al completar un módulo se abre el mismo momento del caso visto desde otro asiento: por qué el otro actor hizo lo que hizo.</div>
+        <div id="cruzadas" style="margin-top:9px"></div>
+      </div>
+      <div class="card plano" style="margin-top:13px">
+        <div style="font-weight:700;font-size:13.5px">Normas de esta ruta</div>
+        <div id="ruta-normas" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONSTANCIA ============ -->
+<section class="vista" id="v-constancia">
+  <button class="btn claro sm" onclick="ir('inicio')">← Volver</button>
+  <div id="const-panel" style="margin-top:16px"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Ruta Digital</b> · Plataforma formativa gratuita sobre investigación y persecución de los delitos de alta tecnología en la República Dominicana. Especificación funcional v1.0.<br>
+    Aplicación de un solo archivo: sin servidor, sin cuenta, sin base de datos. Su progreso se guarda en <span class="mono">localStorage</span> de este navegador y puede exportarlo o borrarlo cuando quiera.<br>
+    Los retos se generan con la API de OpenAI usando <b>su</b> clave, que nunca sale de su equipo salvo hacia <span class="mono">api.openai.com</span>.
+  </div>
+</footer>
+
+<!-- ============ MODALES ============ -->
+<div class="overlay" id="ov-reto"><div class="modal ancho">
+  <div class="mhead"><h3 id="reto-tt">Módulo</h3><button class="x" data-close="ov-reto">×</button></div>
+  <div class="mbody">
+    <div id="reto-cab"></div>
+    <div class="tabs" id="reto-tabs"></div>
+    <div id="reto-panel"></div>
+  </div>
+</div></div>
+
+<div class="overlay" id="ov-biblio"><div class="modal ancho">
+  <div class="mhead"><h3>Biblioteca normativa y comparada</h3><button class="x" data-close="ov-biblio">×</button></div>
+  <div class="mbody">
+    <input id="q-biblio" type="search" placeholder="Buscar en la biblioteca…" style="width:100%;background:#fff;border:2.5px solid var(--tinta);border-radius:10px;padding:10px 12px">
+    <div class="filtros" id="biblio-filtros"></div>
+    <div class="fichas" id="biblio-lista"></div>
+  </div>
+</div></div>
+
+<div class="overlay" id="ov-ficha"><div class="modal">
+  <div class="mhead"><h3 id="ficha-tt">Ficha</h3><button class="x" data-close="ov-ficha">×</button></div>
+  <div class="mbody"><div class="capas" id="ficha-capas"></div><div id="ficha-cuerpo"></div></div>
+</div></div>
+
+<div class="overlay" id="ov-asist"><div class="modal">
+  <div class="mhead"><h3>Asistente de preguntas</h3><button class="x" data-close="ov-asist">×</button></div>
+  <div class="mbody">
+    <div class="nota" style="margin-bottom:12px">Formule su duda con sus palabras. El asistente responde apoyándose en las fichas de la biblioteca y le remite a la norma. <b>No da asesoría sobre casos reales</b> ni sustituye su criterio profesional.</div>
+    <div class="chat" id="chat"></div>
+    <div class="chat-in"><input id="chat-q" placeholder="¿Qué pasa si la cadena de custodia se rompe?"><button class="btn" id="chat-send">Enviar</button></div>
+  </div>
+</div></div>
+
+<div class="overlay" id="ov-busca"><div class="modal">
+  <div class="mhead"><h3>Resultados</h3><button class="x" data-close="ov-busca">×</button></div>
+  <div class="mbody"><div id="busca-res"></div></div>
+</div></div>
+
+<div class="overlay" id="ov-cfg"><div class="modal">
+  <div class="mhead"><h3>Ajustes</h3><button class="x" data-close="ov-cfg">×</button></div>
+  <div class="mbody">
+    <div class="campo">
+      <label>Clave API de OpenAI</label>
+      <input type="password" id="api-key" placeholder="sk-…" autocomplete="off">
+      <div class="nota">Se guarda solo en su navegador (<span class="mono">localStorage · ia_openai_key</span>) y solo se envía a <span class="mono">api.openai.com</span>. No hay servidor intermedio. Obtenga la suya en <span class="mono">platform.openai.com/api-keys</span>. Un recorrido completo cuesta unos céntimos con gpt-4o-mini.</div>
+    </div>
+    <div class="campo">
+      <label>Modelo</label>
+      <select id="model-select">
+        <option value="gpt-4o-mini">gpt-4o-mini · rápido y económico (recomendado)</option>
+        <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+        <option value="gpt-4o">gpt-4o · máxima calidad</option>
+        <option value="gpt-4.1">gpt-4.1</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label>Base de conocimiento verificada (opcional)</label>
+      <div class="nota" id="kb-info" style="margin-bottom:8px">—</div>
+      <button class="btn claro sm" id="btn-load-kb">📂 Cargar conocimiento.json</button>
+      <input type="file" id="kb-file" accept="application/json" style="display:none">
+      <div class="nota">Si junto al <span class="mono">index.html</span> hay un <span class="mono">conocimiento.json</span> con los textos normativos verificados, la app lo carga sola y ancla en él todo lo que genera. Sin él, la IA responde de conocimiento general y puede equivocarse en artículos y cifras: es la razón por la que cada ficha lleva su estado de verificación.</div>
+    </div>
+    <div class="campo">
+      <label>El reloj del expediente</label>
+      <div class="nota" style="margin-bottom:8px">Cada decisión consume tiempo. Puede devolver el expediente al día de la denuncia para volver a recorrerlo.</div>
+      <button class="btn claro sm" id="btn-reset-reloj">↺ Reiniciar el reloj al día de la denuncia</button>
+    </div>
+    <div class="campo">
+      <label>Sus datos</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn claro sm" id="btn-export">⬇ Exportar progreso</button>
+        <button class="btn claro sm" id="btn-import">⬆ Importar</button>
+        <button class="btn claro sm" id="btn-rediag">↻ Repetir diagnóstico</button>
+        <button class="btn rojo sm" id="btn-borrar">🗑 Borrar todo</button>
+      </div>
+      <input type="file" id="import-file" accept="application/json" style="display:none">
+      <div class="nota">No hay cuenta que eliminar porque nunca hubo cuenta. «Borrar todo» vacía el <span class="mono">localStorage</span> de este navegador y no queda rastro en ningún otro sitio.</div>
+    </div>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<script>
+/* ==========================================================================
+   RUTA DIGITAL — app de un solo archivo. Sin servidor, sin cuenta.
+   Estado en localStorage. Retos generados con la API de OpenAI (clave del usuario).
+   ========================================================================== */
+
+/* ---------------- EL CASO ---------------- */
+const CASO = {
+  id:"cuenta-espejo",
+  t:"Cuenta espejo",
+  res:"Una empleada administrativa recibe por mensajería un enlace que reproduce el portal de su banco. Entrega sus credenciales. Cuarenta y ocho horas después salen de su cuenta tres transferencias hacia cuentas de terceros que resultan ser receptoras de paso. El canal de captación es una cuenta de mensajería registrada con un número prepago; el correo asociado está alojado en un proveedor extranjero; el equipo desde el que se opera está en una vivienda del interior del país. El caso toca acceso ilícito, fraude, suplantación de identidad, obtención de datos ante proveedores locales, cooperación internacional y, al final de todo, la pregunta que decide el juicio: quién estaba delante del teclado.",
+  diaDenuncia:11,
+  hitos:[
+    {d:0,  t:"El mensaje", x:"La víctima recibe el enlace y entrega sus credenciales. Cree que ha hablado con su banco.", roles:["abogado"]},
+    {d:2,  t:"Las transferencias", x:"Tres operaciones hacia cuentas receptoras de paso. Los registros de sesión del banco quedan generados en este momento.", roles:["fiscal"]},
+    {d:9,  t:"La víctima se entera", x:"Al revisar el estado de cuenta. Empieza a tomar capturas de pantalla y a reenviarse conversaciones a otro teléfono.", roles:["abogado","policia"]},
+    {d:11, t:"La denuncia", x:"Se presenta ante la unidad policial. Aquí comienza el expediente y aquí comienza a correr su reloj.", roles:["policia"]},
+    {d:14, t:"El requerimiento a la operadora", x:"Se solicitan datos de tráfico y conexión. Todo lo anterior al plazo de conservación puede haber dejado de existir.", roles:["fiscal"]},
+    {d:22, t:"El allanamiento", x:"Vivienda en el interior. Un equipo encendido, un teléfono desbloqueado, dos personas dentro y una red compartida.", roles:["policia","perito"]},
+    {d:26, t:"La adquisición", x:"Imagen forense, cálculo de hash, apertura de la cadena de custodia. O no.", roles:["perito","secretario"]},
+    {d:40, t:"La evidencia extranjera", x:"El correo asociado está fuera del país. Empieza la vía de cooperación, que tiene sus propios tiempos.", roles:["fiscal"]},
+    {d:58, t:"El informe pericial", x:"Se entrega al Ministerio Público y llega al tribunal. Alguien tiene que leerlo, custodiarlo y entenderlo.", roles:["perito","oficinista","secretario"]},
+    {d:75, t:"La impugnación", x:"La defensa ataca en tres planos: licitud, integridad y atribución. Uno de los tres suele encontrar puerta.", roles:["abogado","juez"]},
+    {d:90, t:"El límite", x:"Vence el plazo mínimo de conservación de datos del artículo 56. Lo que no se pidió, ya no se pide.", roles:[]},
+    {d:120,t:"La audiencia", x:"El perito ratifica. El juez valora y motiva. Aquí se ve todo lo que se hizo bien y todo lo que no.", roles:["juez","perito","secretario"]}
+  ]
+};
+
+/* ---------------- LOS SIETE ROLES ---------------- */
+const ROLES = {
+ policia:{
+  ic:"🚔", nm:"Agente policial", sb:"DICAT · DIDI · primer respondiente", prio:false,
+  cm:"Llegar primero sin destruir lo que se busca proteger.",
+  doc:"acta de incautación digital y apertura de cadena de custodia",
+  rub:"(1) identificación completa del soporte y su estado, (2) constancia de lo que se hizo y de lo que no se tocó, (3) hora, lugar y personas presentes, (4) apertura correcta de la cadena de custodia, (5) ausencia de valoraciones que no corresponden al acta.",
+  defecto:"un acta de incautación digital redactada por un agente sin formación",
+  normas:["ley5307","cpp","iso27037","rfc3227"],
+  mods:[
+   {id:"p1", t:"El primer respondiente digital", f:"qué se toca y qué no, dispositivo encendido frente a apagado, evidencia volátil que desaparece al apagar, riesgo del bloqueo y del cifrado"},
+   {id:"p2", t:"Identificación y documentación de la escena digital", f:"fotografía del estado, conexiones activas, dispositivos de almacenamiento, servicios en la nube asociados, etiquetado"},
+   {id:"p3", t:"Recepción de la denuncia", f:"qué preguntar a la víctima en la primera entrevista para no perder el rastro, qué instrucciones darle sobre sus cuentas y dispositivos, qué no debe hacer ella"},
+   {id:"p4", t:"El acta que sostiene todo", f:"redacción del acta de incautación digital, apertura de la cadena de custodia, identificadores del soporte"},
+   {id:"p5", t:"Coordinación institucional", f:"cuándo hace falta autorización previa, cuándo debe intervenir el Ministerio Público, articulación con el perito y con la unidad especializada"}
+  ]},
+ fiscal:{
+  ic:"⚖️", nm:"Ministerio Público", sb:"Procuraduría especializada · fiscalía", prio:false,
+  cm:"Pedir lo correcto, a tiempo y con la motivación que resiste la impugnación.",
+  doc:"solicitud de medida de investigación tecnológica, motivada y delimitada",
+  rub:"(1) hechos y calificación jurídica precisas, (2) motivación de la necesidad y la proporcionalidad, (3) delimitación exacta del objeto: qué datos, de qué cuenta, de qué período, (4) plazo y control de la conservación, (5) no pedir de más ni de menos.",
+  defecto:"una solicitud de medida de investigación redactada con prisa y sin delimitar",
+  normas:["ley5307","cpp","budapest","constitucion","ley17213"],
+  mods:[
+   {id:"f1", t:"Calificación jurídica", f:"qué tipo penal aplica y qué elementos debe acreditar cada uno bajo la Ley 53-07 y su relación con el Código Penal: acceso ilícito, fraude, suplantación de identidad"},
+   {id:"f2", t:"La carrera contra el plazo", f:"preservación urgente de datos ante proveedores y operadoras, redacción de la solicitud, control del plazo mínimo de conservación del artículo 56"},
+   {id:"f3", t:"Medidas de investigación tecnológica", f:"requisitos de motivación, delimitación del objeto, proporcionalidad, por qué una solicitud amplia produce evidencia frágil e impugnable"},
+   {id:"f4", t:"Dirección del peritaje", f:"cómo formular el objeto de la pericia, qué se le pregunta al perito y qué no puede preguntársele, límites del encargo"},
+   {id:"f5", t:"Cooperación internacional", f:"vías para obtener evidencia alojada en el extranjero, Convenio de Budapest, solicitudes directas a proveedores, tiempos reales"},
+   {id:"f6", t:"Teoría del caso y atribución", f:"cómo se construye el puente probatorio entre el dispositivo y la persona, prueba de contexto, dispositivos compartidos"}
+  ]},
+ perito:{
+  ic:"🔬", nm:"Perito informático", sb:"INACIF · perito de parte", prio:false,
+  cm:"Producir un informe técnicamente sólido y procesalmente utilizable.",
+  doc:"informe pericial o el apartado de conclusiones de un informe pericial",
+  rub:"(1) trazabilidad del método: qué se hizo, con qué y en qué orden, (2) distinción explícita entre hecho observado e inferencia, (3) conclusiones que no exceden lo que la evidencia sostiene, (4) lenguaje comprensible para un tribunal sin perder precisión, (5) constancia de integridad y cadena de custodia.",
+  defecto:"un informe pericial con defectos deliberados de método, de conclusión y de custodia",
+  normas:["iso27037","iso27041","iso17025","rfc3227","ley45408","cpp"],
+  mods:[
+   {id:"e1", t:"Estatuto del perito", f:"marco de actuación, independencia, deber de objetividad, límites del encargo, qué hacer cuando le piden más de lo que puede afirmar"},
+   {id:"e2", t:"Adquisición forense", f:"imagen bit a bit, bloqueadores de escritura, funciones hash, tratamiento de dispositivos encendidos, evidencia volátil, orden de volatilidad"},
+   {id:"e3", t:"Estándares aplicables", f:"ISO/IEC 27037, 27041, 27042 y 27043, RFC 3227, normas UNE 71505 y 71506 como referencia comparada, cómo se acredita el cumplimiento"},
+   {id:"e4", t:"Cadena de custodia documentada", f:"formularios, trazabilidad, almacenamiento, transferencias, eslabones y firmas"},
+   {id:"e5", t:"El informe pericial", f:"estructura, redacción de conclusiones, distinción entre hecho observado e inferencia, traducción a lenguaje comprensible para el tribunal"},
+   {id:"e6", t:"La ratificación en audiencia", f:"interrogatorio y contrainterrogatorio, las preguntas que más frecuentemente desarman un informe, qué no debe afirmar el perito bajo presión"}
+  ]},
+ abogado:{
+  ic:"📁", nm:"Abogado litigante", sb:"defensa y querella", prio:false,
+  cm:"Saber qué pedir, qué impugnar y sobre qué base.",
+  doc:"escrito de impugnación de la prueba digital, o su contradictorio desde la querella",
+  rub:"(1) identificación precisa del vicio y del plano al que pertenece, (2) fundamento normativo concreto, (3) consecuencia procesal que se pide y por qué procede, (4) no confundir integridad con autenticidad ni con atribución, (5) no impugnar lo que no es impugnable.",
+  defecto:"un escrito de impugnación que confunde los planos y ataca donde no hay vicio",
+  normas:["ley5307","cpp","constitucion","comparado_es"],
+  mods:[
+   {id:"a1", t:"La primera consulta", f:"qué instrucciones dar al cliente en las primeras veinticuatro horas, qué diligencias urgentes corresponden, qué no debe hacer con sus dispositivos y cuentas"},
+   {id:"a2", t:"Rutas de denuncia", f:"a qué instancia acudir según el caso, qué se aporta, qué se pide, competencias de cada órgano"},
+   {id:"a3", t:"Anatomía del informe pericial", f:"cómo se lee un informe, qué se busca, dónde están los puntos habitualmente débiles, qué apartados suelen faltar"},
+   {id:"a4", t:"Los tres planos de la impugnación", f:"licitud de la obtención, integridad y autenticidad, atribución; argumentos y límites de cada plano; no confundirlos"},
+   {id:"a5", t:"El peritaje de parte", f:"cuándo conviene, cómo se encarga, cómo se contrasta con el peritaje oficial"},
+   {id:"a6", t:"Prueba de mensajería y capturas de pantalla", f:"qué valor tienen, cuándo se caen, qué las sostiene, diferencia entre higiene mínima y aseguramiento probatorio"},
+   {id:"a7", t:"Interrogatorio del perito", f:"preparación de la línea de preguntas desde la acusación y desde la defensa"}
+  ]},
+ juez:{
+  ic:"🏛️", nm:"Juez", sb:"instrucción y juicio", prio:false,
+  cm:"Valorar prueba técnica sin ser técnico, y motivar esa valoración.",
+  doc:"la fundamentación de una decisión sobre admisibilidad o valor de una pieza probatoria",
+  rub:"(1) identificación del problema probatorio real, (2) criterio aplicado y su fundamento, (3) distinción entre licitud, integridad y atribución, (4) motivación suficiente para resistir un recurso, (5) no suplantar al perito ni renunciar al control.",
+  defecto:"una resolución que admite o excluye prueba digital con motivación insuficiente",
+  normas:["cpp","constitucion","ley5307","iso27037"],
+  mods:[
+   {id:"j1", t:"Qué puede y qué no puede probar la evidencia digital", f:"límites epistémicos de la prueba informática, integridad frente a autenticidad frente a atribución, qué acredita una dirección IP y qué no"},
+   {id:"j2", t:"Control de la medida de investigación", f:"qué debe contener una autorización para resistir la nulidad, delimitación del objeto, proporcionalidad, motivación"},
+   {id:"j3", t:"Valoración del informe pericial", f:"criterios de suficiencia, método y trazabilidad, qué preguntar al perito desde el estrado"},
+   {id:"j4", t:"Prueba obtenida fuera del objeto autorizado", f:"tratamiento del hallazgo casual, qué hacer con lo encontrado que excede la autorización"},
+   {id:"j5", t:"Motivación de la sentencia en materia de prueba digital", f:"cómo se escribe la valoración de una prueba técnica, análisis de decisiones comparadas"}
+  ]},
+ secretario:{
+  ic:"🗄️", nm:"Secretario del tribunal", sb:"custodia y fe pública", prio:true,
+  cm:"Custodiar sin romper y dar fe de lo que efectivamente ocurrió.",
+  doc:"el registro de custodia de un soporte y el acta de audiencia con prueba digital",
+  rub:"(1) identificadores del soporte correctamente consignados, (2) constancia del estado en cada movimiento, (3) trazabilidad completa sin eslabones en blanco, (4) constancia de lo efectivamente ocurrido en sala, (5) no dar fe de lo que no se verificó.",
+  defecto:"un registro de custodia con eslabones rotos y un acta que no consigna lo que ocurrió",
+  normas:["cpp","iso27037","ley17213"],
+  mods:[
+   {id:"s1", t:"Recepción de soportes digitales", f:"verificación al ingreso, constancia del estado, registro de identificadores, qué se comprueba y qué no se abre"},
+   {id:"s2", t:"Custodia y almacenamiento", f:"condiciones físicas y lógicas, control de accesos, registro de movimientos, riesgos del almacenamiento común"},
+   {id:"s3", t:"El acta de audiencia con prueba digital", f:"cómo se consigna la exhibición o reproducción de un soporte, qué debe quedar registrado, qué pasa si no se consigna"},
+   {id:"s4", t:"Devolución, conservación y destrucción", f:"qué se conserva, por cuánto tiempo, bajo qué autorización, qué se devuelve y a quién"}
+  ]},
+ oficinista:{
+  ic:"📎", nm:"Oficinista o auxiliar", sb:"mesa de entrada del tribunal", prio:true,
+  cm:"Reconocer lo que tiene en las manos y no romperlo por desconocimiento.",
+  doc:"la nota de incidencia que escala una situación al secretario",
+  rub:"(1) identifica correctamente que hay evidencia digital en juego, (2) describe lo ocurrido sin interpretarlo, (3) no propone ni ejecuta actuaciones que no le corresponden, (4) escala con la información que el secretario necesita, (5) deja constancia del momento y de quién intervino.",
+  defecto:"una nota de mesa de entrada donde alguien hizo lo que no debía y no lo escaló",
+  normas:["cpp","iso27037"],
+  mods:[
+   {id:"o1", t:"Qué es un soporte con evidencia digital", f:"por qué no es un anexo más del expediente, qué contiene realmente un USB o un teléfono incautado, qué se pierde al tratarlo como papel"},
+   {id:"o2", t:"Manipulación segura", f:"qué no se conecta, qué no se abre, qué no se copia y por qué; qué ocurre al conectar un soporte a un equipo de oficina"},
+   {id:"o3", t:"Registro y trazabilidad", f:"cómo se registra el movimiento de un soporte en el sistema de gestión de casos, qué datos son imprescindibles"},
+   {id:"o4", t:"Señales de alerta", f:"cuándo escalar al secretario y con qué información, situaciones típicas de mesa de entrada que rompen la cadena"}
+  ]}
+};
+const ORDEN_ROLES = ["policia","fiscal","perito","abogado","juez","secretario","oficinista"];
+
+/* ---------------- MODOS DE RETO ---------------- */
+const MODOS = [
+ {id:"decision", motor:"quiz",     ic:"⚖️", lb:"Decisión en el caso", ds:"Qué hace usted ahora, y hasta dónde llega el caso si se equivoca", umbral:60},
+ {id:"documento", motor:"abierto", ic:"✍️", lb:"El documento",        ds:"Redacte la pieza que sostiene su actuación",                       umbral:70},
+ {id:"defecto",  motor:"defecto",  ic:"🔍", lb:"Caza el defecto",     ds:"Encuentre lo que está mal en un documento del expediente",         umbral:70}
+];
+const DIMS = [
+ {id:"tec", nm:"Conceptos técnicos",  ds:"dato, metadato, dirección IP, hash, imagen forense, evidencia volátil"},
+ {id:"nor", nm:"Marco normativo",     ds:"Ley 53-07, Código Procesal Penal, protección de datos, Convenio de Budapest"},
+ {id:"pro", nm:"Decisión procesal",   ds:"qué corresponde hacer, en qué orden y con qué consecuencia"}
+];
+const NIVELES = {
+ 1:{nm:"Fundamento",      ds:"Analogías del mundo físico, ninguna sigla sin explicar, ejemplos cotidianos.", horas:12},
+ 2:{nm:"Aplicación",      ds:"Menos concepto y más trabajo sobre documentos reales con defectos.",           horas:9},
+ 3:{nm:"Litigio avanzado",ds:"Zonas grises: impugnación, atribución, objeto excedido, jurisdicción ajena.",  horas:7}
+};
+
+/* ---------------- BIBLIOTECA ---------------- */
+/* Cada ficha se presenta en tres capas (ficha · resumen operativo · texto in extenso).
+   Ninguna está verificada en fuente oficial: la app lo declara en cada ficha, como
+   exige el capítulo 9.3 de la especificación. La capa 3 remite a la fuente. */
+const BIBLIO = [
+ {id:"ley5307", tp:"rd", t:"Ley 53-07", sb:"Crímenes y Delitos de Alta Tecnología",
+  c1:"Es la ley que define los delitos informáticos en la República Dominicana y organiza quién los investiga. Aparece desde el primer minuto del caso: determina qué se persigue, ante quién y con qué plazos.",
+  c2:"Tipifica las conductas contra sistemas y datos, y crea el marco institucional de persecución. Para el recorrido importan sobre todo tres cosas. Primera: los tipos aplicables al caso —acceso ilícito, fraude y suplantación de identidad— y qué elementos hay que acreditar en cada uno, que no son los mismos. Segunda: el deber de los proveedores de servicio de conservar los datos de tráfico, conexión y acceso durante un período mínimo, que la especificación sitúa en noventa días por el artículo 56; ese plazo es el que convierte la investigación en una carrera. Tercera: el reparto de competencias entre la Procuraduría especializada, el DICAT de la Policía Nacional, la DIDI y la Comisión Interinstitucional, que es lo que responde a la pregunta de a qué puerta se toca y en qué orden.",
+  fuente:"Congreso Nacional de la República Dominicana · Consultoría Jurídica del Poder Ejecutivo"},
+ {id:"cpp", tp:"rd", t:"Código Procesal Penal", sb:"Ley 76-02 y sus modificaciones",
+  c1:"El código que rige cómo se investiga y cómo se juzga. La evidencia digital no tiene un procedimiento propio: se somete al régimen general de la prueba, con los ajustes que impone su naturaleza.",
+  c2:"Lo que hay que dominar del código en materia de alta tecnología es el régimen del peritaje —designación, objeto, contradicción y ratificación—, el de los registros e incautaciones —autorización, delimitación del objeto y qué ocurre con lo hallado fuera de él—, el de los medios de prueba y su incorporación al juicio, y el de la cadena de custodia como garantía de que lo que se valora es lo que se ocupó. Casi toda impugnación de prueba digital que prospera se apoya en una regla de este código, no en una regla técnica.",
+  fuente:"Poder Judicial de la República Dominicana"},
+ {id:"ley17213", tp:"rd", t:"Ley 172-13", sb:"Protección de Datos de Carácter Personal",
+  c1:"Regula el tratamiento de datos personales. Importa en dos momentos: cuando se piden datos a un proveedor y cuando la propia investigación acumula información de personas que no son investigadas.",
+  c2:"Fija los principios de licitud, finalidad y proporcionalidad del tratamiento, y los derechos de las personas sobre sus datos. En el recorrido aparece de tres formas. Primera: una solicitud de datos amplia no solo produce evidencia frágil, también produce tratamiento excesivo. Segunda: la evidencia incautada suele contener datos de terceros ajenos al caso, cuya presencia hay que gestionar. Tercera: es la razón por la que esta plataforma descarta la vigilancia biométrica del participante durante los exámenes, según la advertencia de proporcionalidad del capítulo 6 de la especificación.",
+  fuente:"Congreso Nacional de la República Dominicana"},
+ {id:"ley12602", tp:"rd", t:"Ley 126-02", sb:"Comercio Electrónico, Documentos y Firmas Digitales",
+  c1:"Da valor jurídico al documento electrónico y a la firma digital. Es la base sobre la que se discute si un registro electrónico puede valer como documento.",
+  c2:"Establece el principio de equivalencia funcional: un documento electrónico no se descarta por ser electrónico. Fija los requisitos de integridad y atribución que permiten tratarlo como documento, y regula la firma digital y las entidades de certificación. En el caso importa cuando hay que discutir el valor de un registro bancario, de un correo o de una constancia electrónica, y cuando la defensa sostiene que un archivo no acredita nada por sí mismo.",
+  fuente:"Congreso Nacional de la República Dominicana · INDOTEL"},
+ {id:"ley45408", tp:"rd", t:"Ley 454-08", sb:"Instituto Nacional de Ciencias Forenses",
+  c1:"Crea el INACIF y define el marco de la actuación pericial oficial. Responde a quién le corresponde peritar y bajo qué condiciones.",
+  c2:"Sitúa la pericia forense en un marco institucional con exigencias de independencia técnica y de método. Para el perito define su estatuto y sus límites; para el fiscal, a quién dirige el encargo y cómo lo formula; para el abogado y el juez, qué se le puede exigir a un informe oficial y en qué se diferencia de un peritaje de parte.",
+  fuente:"Congreso Nacional de la República Dominicana · INACIF"},
+ {id:"constitucion", tp:"rd", t:"Constitución de la República", sb:"garantías aplicables a la prueba digital",
+  c1:"Las garantías constitucionales son el primer plano de toda impugnación: si la obtención fue ilícita, lo demás no llega a discutirse.",
+  c2:"Cuatro garantías cruzan todo el recorrido. La intimidad y el derecho a la vida privada, que es lo que se limita al registrar un dispositivo. La inviolabilidad de las comunicaciones, que exige autorización para acceder a su contenido. El debido proceso, del que dependen la motivación de la medida y la contradicción del peritaje. Y la tutela judicial efectiva, que da sentido al control judicial de la medida de investigación. Un registro amplio sin delimitación no falla por técnica: falla aquí.",
+  fuente:"Constitución proclamada por la Asamblea Nacional"},
+ {id:"protocolos", tp:"rd", t:"Reglamentos y protocolos vigentes", sb:"Procuraduría, Poder Judicial e INDOTEL",
+  c1:"Por debajo de las leyes hay resoluciones y protocolos que determinan la práctica diaria: formularios, vías de solicitud y procedimientos de custodia.",
+  c2:"Esta es la capa que más cambia y la que más se ignora. Incluye los protocolos de actuación y cadena de custodia, los formatos de solicitud de datos a operadoras, y las resoluciones sobre evidencia digital del Poder Judicial. Debe revisarse cada seis meses y ante cualquier reforma. Mientras esta ficha no esté verificada contra la resolución vigente, trátela como orientación y no como fuente.",
+  fuente:"Procuraduría General de la República · Poder Judicial · INDOTEL"},
+ {id:"budapest", tp:"int", t:"Convenio de Budapest", sb:"Convenio sobre la Ciberdelincuencia · Consejo de Europa",
+  c1:"El instrumento internacional de referencia en ciberdelincuencia, ratificado por la República Dominicana. Es la vía por la que se pide evidencia alojada fuera del país.",
+  c2:"Armoniza tipos penales, poderes de investigación y cooperación internacional. Del recorrido interesan sus mecanismos: la conservación rápida de datos almacenados, que permite congelar la información mientras se tramita la vía formal; la asistencia mutua para obtener datos de tráfico y de contenido; y la red de puntos de contacto permanente. Su protocolo adicional aborda el acceso a datos en poder de proveedores extranjeros. La regla práctica: pida la conservación de inmediato, aunque la obtención tarde meses.",
+  fuente:"Consejo de Europa · Serie de Tratados Europeos núm. 185"},
+ {id:"cooperacion", tp:"int", t:"Vías de cooperación y asistencia", sb:"cómo se pide la prueba que está fuera",
+  c1:"La evidencia alojada en el extranjero no se obtiene pidiéndola: se tramita. Y tarda más de lo que dura el plazo de conservación local.",
+  c2:"Coexisten tres vías con tiempos muy distintos. La solicitud directa al proveedor, rápida pero limitada a datos de suscriptor y sujeta a la política de cada empresa. La conservación rápida por la vía del convenio, que no entrega el contenido pero impide que se borre. Y la asistencia judicial formal, que sí entrega contenido y se cuenta en meses. La consecuencia procesal es una sola: la conservación se pide el primer día, no cuando la investigación está madura.",
+  fuente:"Autoridad central de cooperación jurídica internacional"},
+ {id:"iso27037", tp:"tec", t:"ISO/IEC 27037", sb:"identificación, recolección, adquisición y preservación",
+  c1:"El estándar que describe cómo se recoge evidencia digital sin degradarla. Es la referencia técnica del primer respondiente y del perito.",
+  c2:"Define los roles de quien identifica y recoge y de quien adquiere y analiza, y fija los principios que sostienen todo lo demás: minimizar la manipulación del original, documentar cada acción, respetar el orden de volatilidad y garantizar auditabilidad. De ahí salen las reglas prácticas del caso: no operar sobre el original sin bloqueo de escritura, calcular el valor hash en el momento de la adquisición, y decidir con criterio si un equipo encendido se apaga o se preserva en caliente, porque apagarlo elimina de forma irreversible la memoria volátil.",
+  fuente:"ISO/IEC · norma de pago"},
+ {id:"iso27041", tp:"tec", t:"ISO/IEC 27041, 27042 y 27043", sb:"idoneidad del método, análisis e investigación",
+  c1:"La familia que continúa a la 27037: si aquella dice cómo se recoge, estas dicen cómo se justifica el método, cómo se analiza y cómo se conduce la investigación completa.",
+  c2:"La 27041 aborda cómo se acredita que el método empleado era idóneo para el objetivo, que es exactamente lo que un tribunal pregunta cuando el informe se impugna. La 27042 trata el análisis y la interpretación de la evidencia, con la distinción entre lo observado y lo inferido. La 27043 describe el proceso de investigación de incidentes de principio a fin. En audiencia, la pregunta que más informes desarma no es qué encontró, sino por qué su método permitía encontrarlo.",
+  fuente:"ISO/IEC · normas de pago"},
+ {id:"iso17025", tp:"tec", t:"ISO/IEC 17025", sb:"competencia de laboratorios de ensayo",
+  c1:"La norma de acreditación de laboratorios. No obliga al perito individual, pero es la vara con la que se mide la solidez de un laboratorio forense.",
+  c2:"Exige competencia técnica demostrable, control de equipos y métodos, trazabilidad de las mediciones y aseguramiento de la calidad de los resultados. En el litigio se usa como referencia de contraste: un laboratorio acreditado tiene documentado lo que otro tiene que explicar de memoria en el estrado.",
+  fuente:"ISO/IEC · norma de pago"},
+ {id:"rfc3227", tp:"tec", t:"RFC 3227", sb:"recolección y archivo de evidencia",
+  c1:"Documento breve y gratuito que fija el orden de volatilidad: qué se recoge primero porque desaparece antes.",
+  c2:"Su aportación central es el orden de volatilidad: registros y caché, tabla de rutas y conexiones activas, memoria, sistemas de archivos temporales, disco, y por último soportes y configuración física. Añade principios de recolección —minimizar la alteración, documentar cada paso, evitar herramientas que escriban en el original— y de archivo. Es la razón técnica por la que apagar un equipo encendido en una escena puede destruir prueba de forma irreversible.",
+  fuente:"IETF · RFC 3227, disponible libremente"},
+ {id:"comparado_es", tp:"cmp", t:"España", sb:"pericia, normas UNE y prueba de mensajería",
+  c1:"Sirve de contraste en dos puntos que la República Dominicana tiene abiertos: cómo se accede a la función pericial y qué se exige para dar por auténtica una conversación.",
+  c2:"El acceso a la pericia se articula mediante listas remitidas anualmente por colegios profesionales y designación por sorteo, con un debate abierto sobre si los requisitos de colegiación y formación son una barrera desproporcionada. En el plano técnico, las normas UNE 71505 y 71506 desarrollan la gestión y el análisis de evidencias electrónicas. Y en el plano probatorio existe una línea jurisprudencial consolidada que exige prudencia con las capturas de conversaciones cuando se impugna su autenticidad, y que se apoya en la prueba pericial o en el propio soporte para sostenerlas. Contraste dominicano: no existe un régimen equivalente de listas periciales ni un desarrollo normativo técnico propio, y la discusión sobre la prueba de mensajería está menos asentada.",
+  fuente:"Ley de Enjuiciamiento Civil y Criminal · AENOR · jurisprudencia del Tribunal Supremo"},
+ {id:"comparado_lat", tp:"cmp", t:"Argentina, Chile y Colombia", sb:"protocolos de cadena de custodia y acreditación",
+  c1:"Tres modelos de protocolo nacional de cadena de custodia digital y de acreditación de laboratorios forenses, útiles como referencia de lo que aquí todavía no está escrito.",
+  c2:"Los tres países cuentan con protocolos nacionales que fijan formularios, eslabones y responsables de la custodia digital, y con modelos de acreditación de laboratorios forenses de referencia regional. Lo aprovechable no es el texto sino la estructura: qué campos tiene un formulario de custodia que resiste una impugnación, y qué se exige a un laboratorio para que sus resultados no dependan de la persona que los firmó. Contraste dominicano: la práctica se sostiene más en protocolos institucionales dispersos que en un instrumento nacional único.",
+  fuente:"Ministerios públicos y policías científicas nacionales"},
+ {id:"comparado_mx", tp:"cmp", t:"México", sb:"guías del primer respondiente",
+  c1:"Guías de actuación del primer respondiente en escenas con evidencia digital, escritas para agentes sin formación técnica.",
+  c2:"Su valor está en el registro: son documentos operativos, con listas de comprobación y decisiones binarias para quien llega primero y no es perito. Resuelven en una página las preguntas que en el caso deciden todo —qué se fotografía, qué se etiqueta, qué se apaga y qué no— y son el modelo más directamente trasladable al perfil de agente policial de este recorrido.",
+  fuente:"Fiscalía General de la República · protocolos nacionales de actuación"}
+];
+const TIPOS_BIBLIO = {rd:"República Dominicana", int:"Instrumentos internacionales", tec:"Estándares técnicos", cmp:"Derecho comparado"};
+
+/* ---------------- GLOSARIO ---------------- */
+const GLOSARIO = {
+ "dato":"El contenido en sí: el texto del mensaje, el archivo, la imagen. Lo que una persona escribió o guardó.",
+ "metadato":"El dato sobre el dato: cuándo se creó un archivo, con qué equipo, desde dónde se envió un mensaje. Casi nunca lo ve el usuario y casi siempre es lo que decide el caso.",
+ "datos de tráfico":"El registro de que una comunicación ocurrió y por dónde pasó, sin su contenido. Es lo que conservan las operadoras durante un plazo mínimo y lo que caduca.",
+ "dirección IP":"El número que identifica una conexión en la red en un momento dado. Acredita desde qué conexión se hizo algo, no quién estaba delante del teclado.",
+ "función hash":"Una operación que resume un archivo o un disco en una cadena fija de caracteres. Si cambia un solo bit del original, la cadena cambia por completo. Sirve para probar que algo no se alteró.",
+ "imagen forense":"Copia exacta, bit a bit, de un soporte entero, incluido el espacio que el sistema considera vacío. No es lo mismo que copiar los archivos.",
+ "bloqueador de escritura":"Dispositivo o programa que permite leer un soporte sin que se escriba nada en él. Sin bloqueo, el simple hecho de conectarlo puede alterarlo.",
+ "evidencia volátil":"La información que solo existe mientras el equipo está encendido: memoria, conexiones activas, procesos en ejecución. Al apagar, desaparece y no vuelve.",
+ "orden de volatilidad":"El criterio de recoger primero lo que antes desaparece. Está en la RFC 3227 y es lo que decide si se apaga o no un equipo encontrado encendido.",
+ "cadena de custodia":"El registro continuo de quién tuvo la evidencia, cuándo, dónde y para qué, desde que se ocupa hasta que se valora. Un eslabón en blanco es una puerta abierta.",
+ "integridad":"Que la evidencia no se alteró entre que se ocupó y que se analizó. Es lo que acredita la coincidencia de dos valores hash. No dice nada más.",
+ "autenticidad":"Que la evidencia es lo que dice ser y proviene de donde dice provenir. Es una pregunta distinta de la integridad.",
+ "atribución":"Que fue una persona concreta quien realizó la acción. Es el salto más difícil de la prueba digital y el que más sentencias decide.",
+ "licitud":"Que la evidencia se obtuvo respetando las garantías. Si falla, los otros planos ya no llegan a discutirse.",
+ "hallazgo casual":"Lo que aparece durante un análisis autorizado pero queda fuera del objeto autorizado. No se ignora ni se incorpora sin más: se documenta y se pone en conocimiento de la autoridad.",
+ "primer respondiente":"Quien llega primero a la escena y no suele ser perito. Sus primeros minutos determinan qué evidencia seguirá existiendo.",
+ "adquisición":"El acto de obtener la copia forense del soporte. Es el momento en que se calcula el hash y se abre la cadena de custodia.",
+ "conservación rápida":"Mecanismo por el que se congela la información en poder de un proveedor mientras se tramita la vía formal para obtenerla. No entrega el contenido: impide que se borre.",
+ "cuenta receptora de paso":"Cuenta usada para recibir y reenviar de inmediato fondos de origen ilícito, dificultando el rastreo.",
+ "ratificación":"La comparecencia del perito en audiencia para sostener su informe y responder al contradictorio.",
+ "objeto de la pericia":"La pregunta concreta que se le formula al perito. Marca el límite de lo que puede analizar y de lo que puede afirmar."
+};
+</script>
+<script>
+/* ============================ ESTADO ============================ */
+const K_ST="rutadigital_state_v1", K_API="ia_openai_key", K_MOD="rutadigital_model";
+function estadoEnBlanco(){
+  return {rol:null, dia:CASO.diaDenuncia, niveles:{tec:null,nor:null,pro:null},
+          prog:{}, decisiones:0, ultimo:null, diagFecha:null, simples:{}};
+}
+let S = cargarEstado();
+function cargarEstado(){
+  try{ const s=JSON.parse(localStorage.getItem(K_ST)); if(s&&s.prog) return Object.assign(estadoEnBlanco(),s); }catch(e){}
+  return estadoEnBlanco();
+}
+function guardar(){ try{ localStorage.setItem(K_ST,JSON.stringify(S)); }catch(e){} }
+function progOf(rol,mid){ const k=rol+":"+mid; if(!S.prog[k]) S.prog[k]={}; return S.prog[k]; }
+function estrellas(rol,mid){ const p=progOf(rol,mid); return MODOS.filter(m=>(p[m.id]||0)>=m.umbral).length; }
+function modHecho(rol,mid){ return estrellas(rol,mid)>=1; }
+function modsHechos(rol){ return ROLES[rol].mods.filter(m=>modHecho(rol,m.id)).length; }
+function rutaCompleta(rol){ return ROLES[rol].mods.every(m=>modHecho(rol,m.id)); }
+function nivelGlobal(){
+  const v=DIMS.map(d=>S.niveles[d.id]).filter(Boolean);
+  if(!v.length) return 2;
+  return Math.max(1,Math.min(3,Math.round(v.reduce((a,b)=>a+b,0)/v.length)));
+}
+function diagnosticado(){ return DIMS.every(d=>S.niveles[d.id]); }
+
+/* ============================ UTILIDADES ============================ */
+const $=id=>document.getElementById(id);
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function toast(t){ const e=$("toast"); e.textContent=t; e.classList.add("on"); setTimeout(()=>e.classList.remove("on"),2600); }
+function abrir(id){ $(id).classList.add("on"); }
+function cerrar(id){ $(id).classList.remove("on"); }
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>cerrar(b.dataset.close));
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{ if(e.target===o) o.classList.remove("on"); }));
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") document.querySelectorAll(".overlay.on").forEach(o=>o.classList.remove("on")); });
+
+/* marca los términos del glosario dentro de texto YA escapado.
+   Una sola pasada sobre texto plano: nunca puede escribir dentro de un atributo ya generado. */
+const TERMINOS = Object.keys(GLOSARIO).sort((a,b)=>b.length-a.length);
+const RE_TERM = new RegExp("\\b("+TERMINOS.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")\\b","gi");
+function glosar(htmlEscapado){
+  const vistos=new Set();
+  return String(htmlEscapado).replace(RE_TERM,m=>{
+    const k=m.toLowerCase();
+    if(vistos.has(k)||!GLOSARIO[k]) return m;
+    vistos.add(k);
+    return `<span class="term" title="${esc(GLOSARIO[k])}">${m}</span>`;
+  });
+}
+/* pasar texto libre a un onclick por atributo es frágil: se guarda aparte y se pasa la llave */
+const STASH={}; let stashN=0;
+function stash(txt){ const k="s"+(++stashN); STASH[k]=String(txt); return k; }
+function parrafos(txt){ return String(txt).split(/\n+/).filter(Boolean).map(p=>`<p style="margin-bottom:8px">${glosar(esc(p))}</p>`).join(""); }
+
+/* ============================ RELOJ DEL EXPEDIENTE ============================ */
+function pintarReloj(){
+  const d=S.dia, pct=Math.min(d/90,1)*100;
+  const f=$("barra-fill"); f.style.width=pct+"%"; f.classList.toggle("tarde", d>90);
+  const dl=$("barra-dia"); dl.textContent="día "+d; dl.style.left=Math.min(Math.max(pct,7),93)+"%";
+  const est=$("reloj-est");
+  if(d>90){ est.textContent="datos de conexión vencidos"; est.className="reloj-est muerto"; }
+  else if(d>70){ est.textContent="quedan "+(90-d)+" días"; est.className="reloj-est muerto"; }
+  else { est.textContent="quedan "+(90-d)+" días"; est.className="reloj-est vivo"; }
+}
+function avanzarDias(n){
+  const antes=S.dia; S.dia+=n; guardar(); pintarReloj(); pintarExpediente();
+  if(antes<=90 && S.dia>90) toast("El expediente cruzó el día 90. Los datos de conexión que no se pidieron ya no existen.");
+}
+function datosVivos(){ return S.dia<=90; }
+
+/* ============================ NAVEGACIÓN ============================ */
+function ir(v){
+  document.querySelectorAll(".vista").forEach(s=>s.classList.remove("on"));
+  $("v-"+v).classList.add("on");
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+/* ============================ OPENAI ============================ */
+function getKey(){ return localStorage.getItem(K_API)||""; }
+function getModelo(){ return localStorage.getItem(K_MOD)||"gpt-4o-mini"; }
+async function llamar(mensajes,{json=false,temp=0.6}={}){
+  const key=getKey(); if(!key) throw new Error("SIN_CLAVE");
+  const body={model:getModelo(),messages:mensajes,temperature:temp};
+  if(json) body.response_format={type:"json_object"};
+  const r=await fetch("https://api.openai.com/v1/chat/completions",{
+    method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok){ const t=await r.text(); throw new Error("La API respondió "+r.status+". "+t.slice(0,220)); }
+  return (await r.json()).choices[0].message.content;
+}
+function pJSON(t){ return JSON.parse(String(t).trim().replace(/^```json/i,"").replace(/^```/,"").replace(/```$/,"").trim()); }
+function htmlSinClave(){
+  return `<div class="card" style="border-color:var(--rojo)">
+    <h3>Falta su clave de OpenAI</h3>
+    <p style="margin-top:8px;font-size:14px">Los retos se construyen en el momento con la API de OpenAI y la clave la pone usted. No hay cuenta que crear ni servidor intermedio: la clave se guarda en este navegador y solo viaja a <span class="mono">api.openai.com</span>.</p>
+    <button class="btn" style="margin-top:12px" onclick="cerrar('ov-reto');abrir('ov-cfg')">⚙ Poner mi clave</button></div>`;
+}
+function htmlError(e){
+  if(String(e.message).includes("SIN_CLAVE")) return htmlSinClave();
+  return `<div class="card" style="border-color:var(--rojo)"><h3>No se pudo generar el reto</h3>
+    <p style="margin-top:8px;font-size:13.5px">${esc(e.message)}</p>
+    <button class="btn claro sm" style="margin-top:10px" onclick="abrir('ov-cfg')">Revisar ajustes</button></div>`;
+}
+function pipe(ag,st){ document.querySelectorAll(".pstep").forEach(s=>{ if(s.dataset.ag===ag){ s.classList.remove("act","fin"); if(st) s.classList.add(st); } }); }
+function pipeReset(){ document.querySelectorAll(".pstep").forEach(s=>s.classList.remove("act","fin")); }
+
+/* ---------- base de conocimiento opcional ---------- */
+const KB={listo:false, chunks:[], meta:{}};
+function kbBuild(d){ KB.chunks=(d.chunks||[]).map((c,i)=>({id:c.id||i,tema:c.tema||"",texto:c.texto||""})); KB.meta=d; KB.listo=KB.chunks.length>0; kbInfo(); }
+function kbBuscar(q,n=4){
+  if(!KB.listo) return [];
+  const ts=norm(q).split(/\W+/).filter(t=>t.length>3);
+  return KB.chunks.map(c=>{ const h=norm(c.tema+" "+c.texto); let s=0; ts.forEach(t=>{ if(h.includes(t)) s++; }); return {c,s}; })
+    .filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,n).map(x=>x.c);
+}
+function kbInfo(){ const e=$("kb-info"); if(!e) return;
+  e.innerHTML = KB.listo ? `✅ <b>${KB.chunks.length} fragmentos</b> cargados. Lo que la app genere se anclará en ellos.`
+    : `⚠️ No hay base verificada. La IA responderá de conocimiento general y puede equivocarse en artículos, cifras y nombres de órganos.`;
+}
+(async function cargarKB(){
+  try{ const r=await fetch("conocimiento.json",{cache:"no-cache"}); if(!r.ok) throw 0; kbBuild(await r.json()); }
+  catch(e){ kbInfo(); }
+})();
+
+/* ---------- contexto común de los prompts ---------- */
+function reglasNivel(n){
+  return {1:"NIVEL 1 (Fundamento). El participante no distingue un dato de un metadato. Use analogías del mundo físico, no emplee ninguna sigla sin desarrollarla la primera vez, y apoye cada idea en un ejemplo cotidiano. Frases cortas.",
+          2:"NIVEL 2 (Aplicación). El participante maneja los conceptos pero no los ha convertido en práctica procesal. Reduzca la explicación conceptual y trabaje sobre documentos y actuaciones concretas.",
+          3:"NIVEL 3 (Litigio avanzado). El participante lleva casos. Vaya a las zonas grises: impugnación de la cadena de custodia, atribución con dispositivos compartidos, evidencia fuera del objeto autorizado, prueba en jurisdicción extranjera."}[n];
+}
+function fichasDe(rol){
+  return (ROLES[rol].normas||[]).map(id=>BIBLIO.find(b=>b.id===id)).filter(Boolean)
+    .map(b=>`— ${b.t} (${b.sb}): ${b.c2}`).join("\n");
+}
+function contexto(rol,mod){
+  const R=ROLES[rol];
+  const kb=kbBuscar(mod.t+" "+mod.f);
+  const kbTxt = kb.length ? `\n\nFRAGMENTOS VERIFICADOS DE LA BASE DE CONOCIMIENTO (son la fuente de verdad; prevalecen sobre todo lo demás):\n"""\n${kb.map(c=>`[${c.tema}] ${c.texto}`).join("\n\n")}\n"""` : "";
+  return `EL CASO ("${CASO.t}"):\n${CASO.res}\n
+CRONOLOGÍA: ${CASO.hitos.map(h=>`día ${h.d}: ${h.t}`).join(" · ")}
+ESTADO DEL EXPEDIENTE: día ${S.dia} desde el hecho. ${datosVivos()?`Quedan ${90-S.dia} días del plazo mínimo de conservación de datos de tráfico y conexión.`:`YA SE SUPERÓ el plazo mínimo de conservación: los datos de conexión que no se pidieran a tiempo pueden haber dejado de existir, y eso debe reflejarse en el reto.`}
+ROL DEL PARTICIPANTE: ${R.nm} (${R.sb}). Competencia central: ${R.cm}
+MÓDULO: "${mod.t}". Foco: ${mod.f}
+${reglasNivel(nivelGlobal())}
+MARCO NORMATIVO DE REFERENCIA (resúmenes operativos de la biblioteca de la app):\n${fichasDe(rol)}${kbTxt}`;
+}
+const SYS = `Eres el motor de Ruta Digital, una plataforma formativa dominicana sobre investigación y persecución de delitos de alta tecnología. Escribes en español dominicano culto y sobrio, sin florituras y sin tratar al participante con condescendencia.
+REGLAS INNEGOCIABLES:
+1. Primero la explicación llana, después la denominación técnica y su fuente. Nunca al revés.
+2. No inventes números de artículo, de ley, de resolución ni de sentencia. Si no puedes sostener una referencia concreta con lo que se te ha dado, escribe la regla sin la cita, o di explícitamente que debe verificarse en fuente oficial. Es preferible una regla sin cita a una cita falsa.
+3. Nada de asesoría legal sobre casos reales. Todo ocurre dentro del caso simulado.
+4. El error del participante no se castiga: se muestra hasta dónde llega el caso cuando se comete.
+5. Distingue siempre integridad, autenticidad, atribución y licitud. Confundirlas es el error que esta plataforma existe para corregir.`;
+
+/* ============================ INICIO ============================ */
+function pintarRoles(){
+  $("roles").innerHTML = ORDEN_ROLES.map(id=>{
+    const R=ROLES[id], hechos=modsHechos(id), tot=R.mods.length;
+    return `<button class="rol ${S.rol===id?"activo":""} ${R.prio?"prioritario":""}" onclick="elegirRol('${id}')">
+      <span class="ic">${R.ic}</span>
+      <span style="flex:1">
+        <span class="nm">${esc(R.nm)}${R.prio?'<span class="tag-prio">eslabón crítico</span>':""}</span>
+        <span class="sb">${esc(R.sb)}</span>
+        <span class="cm">${esc(R.cm)}</span>
+        <span class="pr">${hechos}/${tot} módulos · ${R.mods.length} + entregable</span>
+      </span></button>`;
+  }).join("");
+}
+function pintarHitos(){
+  $("caso-tt").textContent=CASO.t; $("caso-res").innerHTML=glosar(esc(CASO.res));
+  $("caso-hitos").innerHTML = CASO.hitos.map(h=>{
+    const pas=h.d<=S.dia, lim=h.d===90;
+    return `<div style="display:flex;gap:12px;padding:7px 0;border-bottom:1px solid rgba(16,24,32,.12);opacity:${pas?1:.55}">
+      <span class="mono" style="flex:none;width:62px;font-weight:700;color:${lim?"var(--rojo)":"var(--azul)"}">día ${h.d}</span>
+      <span><b style="font-size:14px">${esc(h.t)}</b><br><span style="font-size:13px;color:var(--gris)">${glosar(esc(h.x))}</span></span>
+    </div>`;
+  }).join("");
+}
+function pintarExpediente(){
+  $("e-caso").textContent=CASO.t;
+  $("e-dia").textContent=S.dia+" / 90";
+  $("e-rol").textContent=S.rol?ROLES[S.rol].nm:"sin asignar";
+  $("e-nivel").textContent=diagnosticado()?NIVELES[nivelGlobal()].nm:"sin medir";
+  const h=S.rol?modsHechos(S.rol):0, t=S.rol?ROLES[S.rol].mods.length:1;
+  $("e-mods").textContent=h+" / "+t;
+  $("e-med").style.width=(h/t*100)+"%";
+  $("e-dec").textContent=S.decisiones;
+}
+function siguientePaso(){
+  if(!getKey()) return {t:"Ponga su clave de OpenAI: no hace falta nada más para empezar", b:"⚙ Ajustes", f:()=>abrir("ov-cfg")};
+  if(!diagnosticado()) return {t:"Haga el diagnóstico de entrada: dieciocho ítems, diez minutos", b:"Empezar", f:()=>{ir("diag");iniciarDiag();}};
+  if(!S.rol) return {t:"Elija la silla desde la que va a recorrer el caso", b:"Ver las siete", f:()=>document.getElementById("roles").scrollIntoView({behavior:"smooth"})};
+  if(rutaCompleta(S.rol)) return {t:"Ha completado la ruta de "+ROLES[S.rol].nm.toLowerCase(), b:"Ver constancia", f:()=>{ir("constancia");pintarConstancia();}};
+  const m=ROLES[S.rol].mods.find(m=>!modHecho(S.rol,m.id));
+  return {t:"Continúe en «"+m.t+"»", b:"Abrir", f:()=>{abrirRuta(S.rol);abrirModulo(m.id);}};
+}
+function pintarPaso(){
+  const p=siguientePaso();
+  $("paso-txt").textContent=p.t; $("paso-btn").textContent=p.b; $("paso-btn").onclick=p.f;
+  if($("v-ruta").classList.contains("on")&&S.rol){
+    const m=ROLES[S.rol].mods.find(m=>!modHecho(S.rol,m.id));
+    $("paso-ruta-txt").textContent = m?("Abra el módulo «"+m.t+"»"):"Ruta completa: solicite su constancia";
+    $("paso-ruta-btn").onclick = m?(()=>abrirModulo(m.id)):(()=>{ir("constancia");pintarConstancia();});
+  }
+}
+function pintarRetomar(){
+  const c=$("retomar");
+  if(!S.ultimo){ c.innerHTML=""; return; }
+  const R=ROLES[S.ultimo.rol]; if(!R){ c.innerHTML=""; return; }
+  const m=R.mods.find(x=>x.id===S.ultimo.mod);
+  c.innerHTML=`<div class="card plano" style="background:#FBF8F0">
+    <div style="font-weight:700;font-size:13px;color:var(--gris)">DONDE LO DEJÓ</div>
+    <div style="margin-top:5px;font-size:14px">${esc(R.nm)} · ${esc(m?m.t:"—")}<br>${esc(S.ultimo.txt||"")}<br><span style="color:var(--gris)">${esc(S.ultimo.fecha||"")}</span></div>
+    <button class="btn sello sm" style="margin-top:10px" onclick="abrirRuta('${S.ultimo.rol}');abrirModulo('${S.ultimo.mod}')">Retomar</button></div>`;
+}
+function elegirRol(id){ S.rol=id; guardar(); pintarRoles(); pintarExpediente(); pintarPaso(); abrirRuta(id); }
+function refrescarInicio(){ pintarRoles(); pintarHitos(); pintarExpediente(); pintarPaso(); pintarRetomar(); pintarReloj(); }
+
+/* ============================ DIAGNÓSTICO ============================ */
+let DG=null;
+function iniciarDiag(){
+  DG={dim:0, ronda:0, items:[], idx:0, aciertos:{tec:0,nor:0,pro:0}, dif:{tec:1,nor:1,pro:1}, fallos:{tec:0,nor:0,pro:0}, resp:0};
+  rondaDiag();
+}
+async function rondaDiag(){
+  const d=DIMS[DG.dim];
+  $("diag-panel").innerHTML=`<div class="cargando"><span class="spin"></span> Preparando los ítems de <b>${esc(d.nm)}</b>…</div>`;
+  try{
+    const dif=["básica: reconocer y aplicar lo elemental","media: aplicar a una situación concreta con más de un elemento en juego","alta: distinguir matices y casos límite"][DG.dif[d.id]-1];
+    const kb=kbBuscar(d.nm+" "+d.ds);
+    const usr=`Genera 3 ítems de diagnóstico de la dimensión "${d.nm}" (${d.ds}) de dificultad ${dif}, referidos a la investigación de delitos de alta tecnología en la República Dominicana.
+${kb.length?`Apóyate en estos fragmentos verificados:\n"""\n${kb.map(c=>c.texto).join("\n\n")}\n"""\n`:""}
+Son ítems DE APLICACIÓN, no de memoria: se plantea una situación y se pregunta qué corresponde hacer o qué acredita un hecho. La respuesta correcta no puede depender de lo que el participante crea saber de sí mismo. Los distractores deben recoger los errores reales y frecuentes de los operadores del sistema de justicia, no opciones absurdas.
+Devuelve SOLO este JSON: {"items":[{"q":"enunciado de la situación y la pregunta","options":["a","b","c","d"],"correct":0,"why":"por qué es la correcta y qué error recoge cada distractor, máximo 3 frases"}]}
+Cuatro opciones, una sola correcta, "correct" es el índice 0-3.`;
+    const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.8});
+    DG.items=pJSON(out).items; DG.idx=0; pintarItemDiag();
+  }catch(e){ $("diag-panel").innerHTML=htmlError(e); }
+}
+function pintarItemDiag(){
+  const d=DIMS[DG.dim], it=DG.items[DG.idx];
+  const total=18, hechos=DG.resp;
+  $("diag-panel").innerHTML=`
+    <div class="card plano"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700">
+      <span>${esc(d.nm)}</span><span class="mono">ítem ${hechos+1} de ${total}</span></div>
+      <div class="medidor" style="margin-top:7px"><i style="width:${hechos/total*100}%"></i></div></div>
+    <div class="qcard" style="margin-top:14px">
+      <div class="qn">${esc(d.nm.toUpperCase())} · DIFICULTAD ${DG.dif[d.id]}</div>
+      <div class="qt">${glosar(esc(it.q))}</div>
+      <div id="diag-opts">${it.options.map((o,i)=>`<button class="opt" onclick="respDiag(${i})">${esc(o)}</button>`).join("")}</div>
+      <div id="diag-fb"></div></div>`;
+}
+function respDiag(i){
+  const d=DIMS[DG.dim], it=DG.items[DG.idx], ok=(i===it.correct);
+  document.querySelectorAll("#diag-opts .opt").forEach((b,j)=>{ b.disabled=true;
+    if(j===it.correct) b.classList.add("ok"); else if(j===i) b.classList.add("mal"); });
+  if(ok){ DG.aciertos[d.id]+= DG.dif[d.id]; DG.fallos[d.id]=0; }
+  else { DG.fallos[d.id]++; }
+  DG.resp++;
+  $("diag-fb").innerHTML=`<div class="fb"><b>${ok?"Correcto":"No es la correcta"}.</b> ${glosar(esc(it.why))}</div>
+    <button class="btn" style="margin-top:11px" onclick="seguirDiag()">Siguiente</button>`;
+}
+function seguirDiag(){
+  const d=DIMS[DG.dim];
+  DG.idx++;
+  if(DG.idx<DG.items.length) return pintarItemDiag();
+  /* fin de ronda: adaptación */
+  if(DG.fallos[d.id]>=2){ DG.dif[d.id]=Math.max(1,DG.dif[d.id]-1); }
+  else if(DG.aciertos[d.id]>=DG.dif[d.id]*2){ DG.dif[d.id]=Math.min(3,DG.dif[d.id]+1); }
+  DG.ronda++;
+  if(DG.ronda%2===1){ return rondaDiag(); }        /* segunda ronda de la misma dimensión */
+  DG.dim++;
+  if(DG.dim<DIMS.length) return rondaDiag();
+  cerrarDiag();
+}
+function cerrarDiag(){
+  DIMS.forEach(d=>{ const a=DG.aciertos[d.id];
+    S.niveles[d.id] = a>=8 ? 3 : a>=4 ? 2 : 1; });
+  S.diagFecha=new Date().toLocaleDateString("es-DO");
+  guardar(); pintarExpediente(); pintarPaso();
+  $("diag-panel").innerHTML=`
+    <div class="card"><h2>Su ubicación</h2>
+      <p style="margin-top:6px;font-size:14px;color:var(--gris)">No hay nota global, porque no la habría en la realidad. Un juez puede tener nivel alto en marco normativo y nivel inicial en conceptos técnicos, y el sistema debe tratarlo así.</p>
+      <div class="dim">${DIMS.map(d=>`<div class="dimc"><div class="dn">${esc(d.nm)}</div>
+        <div class="dl">Nivel ${S.niveles[d.id]} · ${esc(NIVELES[S.niveles[d.id]].nm)}</div>
+        <div style="font-size:13px;color:var(--gris);margin-top:3px">${esc(NIVELES[S.niveles[d.id]].ds)}</div></div>`).join("")}</div>
+      <div class="nota" style="margin-top:12px">Recorrido estimado en su nivel predominante: ${NIVELES[nivelGlobal()].horas} horas. Puede repetir el diagnóstico cuando quiera desde Ajustes.</div>
+      <button class="btn" style="margin-top:14px" onclick="ir('inicio');refrescarInicio()">Elegir mi silla</button></div>`;
+}
+
+/* ============================ RUTA ============================ */
+function abrirRuta(rol){
+  S.rol=rol; guardar(); ir("ruta");
+  const R=ROLES[rol];
+  $("ruta-nm").textContent=R.nm; $("ruta-cm").textContent=R.cm+" "+R.sb;
+  $("ruta-mods").innerHTML = R.mods.map((m,i)=>{
+    const e=estrellas(rol,m.id);
+    return `<button class="mod ${modHecho(rol,m.id)?"hecho":""}" onclick="abrirModulo('${m.id}')">
+      <span class="num">${i+1}</span>
+      <span><span class="tt">${esc(m.t)}</span><span class="fc">${esc(m.f.slice(0,110))}${m.f.length>110?"…":""}</span></span>
+      <span class="estrellas">${[0,1,2].map(k=>`<span class="${k<e?"on":""}">★</span>`).join("")}</span></button>`;
+  }).join("") + `<div class="mod entregable" style="cursor:default">
+      <span class="num" style="background:var(--sello);color:var(--tinta)">◆</span>
+      <span><span class="tt">Entregable de la ruta</span><span class="fc">${esc(R.doc)} — se trabaja dentro de cada módulo, en el reto «El documento»</span></span>
+      <span class="estrellas"></span></div>`;
+  $("ruta-niveles").innerHTML = diagnosticado()
+    ? DIMS.map(d=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0"><span>${esc(d.nm)}</span><b class="mono">N${S.niveles[d.id]}</b></div>`).join("")
+    : `<div style="font-size:13px">Sin medir. Los retos se generarán en nivel 2.<br><button class="btn claro sm" style="margin-top:8px" onclick="ir('diag');iniciarDiag()">Hacer el diagnóstico</button></div>`;
+  $("ruta-normas").innerHTML = (R.normas||[]).map(id=>{ const b=BIBLIO.find(x=>x.id===id); return b?`<button class="res" style="padding:7px 10px;margin-bottom:6px" onclick="verFicha('${b.id}')"><span class="rt" style="font-size:13px">${esc(b.t)}</span><span class="rm">${esc(b.sb)}</span></button>`:""; }).join("");
+  $("cruzadas").innerHTML = ORDEN_ROLES.filter(r=>r!==rol).map(r=>`<button class="btn claro sm" style="margin:0 5px 5px 0" onclick="vistaCruzada('${rol}','${r}')">${ROLES[r].ic} ${esc(ROLES[r].nm)}</button>`).join("");
+  pintarPaso(); pintarExpediente();
+}
+
+/* ============================ RETOS ============================ */
+let RT=null;
+function abrirModulo(mid){
+  const rol=S.rol, R=ROLES[rol], m=R.mods.find(x=>x.id===mid);
+  RT={rol,mod:m,modo:MODOS[0].id,datos:null};
+  $("reto-tt").textContent=m.t;
+  $("reto-cab").innerHTML=`<div class="card plano" style="margin-bottom:14px">
+    <div style="font-size:12.5px;color:var(--gris);font-weight:700">${esc(R.nm.toUpperCase())} · DÍA ${S.dia} DEL EXPEDIENTE${datosVivos()?"":" · DATOS DE CONEXIÓN VENCIDOS"}</div>
+    <div style="margin-top:5px;font-size:14px">${glosar(esc(m.f))}</div></div>`;
+  pintarTabs(); abrir("ov-reto"); cargarReto();
+}
+function pintarTabs(){
+  const p=progOf(RT.rol,RT.mod.id);
+  $("reto-tabs").innerHTML=MODOS.map(m=>{
+    const s=p[m.id]||0, ok=s>=m.umbral;
+    return `<button class="${RT.modo===m.id?"sel":""}" onclick="cambiarModo('${m.id}')">
+      <span class="lb">${m.ic} ${esc(m.lb)} ${ok?'<span style="margin-left:auto;color:var(--sello)">★</span>':""}</span>
+      <span class="ds">${esc(m.ds)}${s?` · mejor: ${s}`:""}</span></button>`;
+  }).join("");
+}
+function cambiarModo(id){ RT.modo=id; pintarTabs(); cargarReto(); }
+function modoActual(){ return MODOS.find(m=>m.id===RT.modo); }
+function recordarUltimo(txt){
+  S.ultimo={rol:RT.rol,mod:RT.mod.id,txt:txt,fecha:new Date().toLocaleString("es-DO")};
+  guardar();
+}
+async function cargarReto(){
+  const mo=modoActual();
+  $("reto-panel").innerHTML=`<div class="cargando"><span class="spin"></span> Construyendo el reto sobre el caso…</div>`;
+  pipeReset(); pipe("biblio", KB.listo?"fin":null); pipe("gen","act");
+  try{
+    if(mo.motor==="quiz") await genDecision();
+    else if(mo.motor==="abierto") await genDocumento();
+    else await genDefecto();
+    pipe("gen","fin");
+  }catch(e){ pipeReset(); $("reto-panel").innerHTML=htmlError(e); }
+}
+
+/* ---------- motor 1: decisión en el caso ---------- */
+async function genDecision(){
+  const usr=`${contexto(RT.rol,RT.mod)}
+
+Genera 4 DECISIONES que este participante debe tomar dentro del caso, en el punto del expediente en que se encuentra y sobre el foco del módulo. Cada una plantea una situación concreta y pregunta qué corresponde hacer AHORA.
+Para cada opción incorrecta debes decir hasta dónde llega el caso si se elige: qué prueba se degrada, qué se pierde, qué ocurrirá en audiencia. No moralices ni regañes: describe la consecuencia procesal.
+Devuelve SOLO este JSON: {"items":[{"q":"situación y pregunta","options":["a","b","c","d"],"correct":0,"why":"por qué esa es la actuación correcta, 2 frases","consecuencias":["qué pasa si se elige a","…b","…c","…d"]}]}
+Cuatro opciones, una sola correcta. "consecuencias" tiene 4 entradas alineadas con las opciones; la de la correcta describe qué se gana. Los distractores son errores reales del oficio, no disparates.`;
+  const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.8});
+  RT.datos={items:pJSON(out).items, idx:0, bien:0, mal:0};
+  pintarDecision();
+}
+function pintarDecision(){
+  const D=RT.datos, it=D.items[D.idx];
+  $("reto-panel").innerHTML=`<div class="qcard">
+    <div class="qn">DECISIÓN ${D.idx+1} DE ${D.items.length} · DÍA ${S.dia}</div>
+    <div class="qt">${glosar(esc(it.q))}</div>
+    <div id="d-opts">${it.options.map((o,i)=>`<button class="opt" onclick="respDecision(${i})">${esc(o)}</button>`).join("")}</div>
+    <div id="d-fb"></div></div>`;
+}
+function respDecision(i){
+  const D=RT.datos; if(!D||!D.items||D.idx>=D.items.length) return;
+  const it=D.items[D.idx], ok=(i===it.correct);
+  pipe("ev","fin");
+  document.querySelectorAll("#d-opts .opt").forEach((b,j)=>{ b.disabled=true;
+    if(j===it.correct) b.classList.add("ok"); else if(j===i) b.classList.add("mal"); });
+  ok?D.bien++:D.mal++;
+  S.decisiones++; guardar(); pintarExpediente();
+  const cons=(it.consecuencias&&it.consecuencias[i])||"";
+  pipe("cons","fin");
+  $("d-fb").innerHTML=`<div class="fb"><b>${ok?"Es la actuación correcta.":"No es la actuación correcta."}</b> ${glosar(esc(it.why))}</div>
+    ${cons?`<div class="fb ${ok?"":"consec"}"><b>Hasta dónde llega el caso.</b> ${glosar(esc(cons))}</div>`:""}
+    <div id="simple-d"></div>
+    <div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap">
+      <button class="btn" onclick="seguirDecision()">${D.idx+1<D.items.length?"Siguiente decisión":"Ver resultado"}</button>
+      <button class="btn claro sm" onclick="explicarSimple('simple-d','${stash(it.why+" "+cons)}')">🧩 Explícamelo más simple</button>
+    </div>`;
+}
+function seguirDecision(){
+  const D=RT.datos; if(!D||!D.items) return;
+  D.idx++;
+  if(D.idx<D.items.length) return pintarDecision();
+  const punt=Math.max(0,Math.min(100,Math.round(D.bien/D.items.length*100)));
+  cerrarReto(punt, 2+3*D.mal, `${D.bien} de ${D.items.length} decisiones correctas.`);
+}
+
+/* ---------- motor 2: el documento ---------- */
+async function genDocumento(){
+  const R=ROLES[RT.rol];
+  const usr=`${contexto(RT.rol,RT.mod)}
+
+Plantea al participante que redacte ${R.doc}, en el punto del expediente en que se encuentra y sobre el foco del módulo. Dale los datos concretos que necesita para poder redactarlo (identificadores, horas, personas presentes, lo que ha ocurrido), inventados pero coherentes con el caso. No le des la solución ni le enumeres lo que debe incluir: eso es lo que se evalúa.
+Devuelve SOLO este JSON: {"consigna":"el encargo completo con los datos, entre 120 y 200 palabras"}`;
+  const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.8});
+  const c=pJSON(out).consigna;
+  RT.datos={consigna:c};
+  $("reto-panel").innerHTML=`<div class="qcard">
+    <div class="qn">EL DOCUMENTO · ${esc(ROLES[RT.rol].doc.toUpperCase())}</div>
+    <div style="margin:8px 0 12px">${parrafos(c)}</div>
+    <div id="simple-doc"></div>
+    <textarea class="resp" id="resp-doc" placeholder="Redacte aquí…"></textarea>
+    <div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap">
+      <button class="btn" id="btn-ev">Entregar para corrección</button>
+      <button class="btn claro sm" onclick="explicarSimple('simple-doc','${stash(c)}')">🧩 Explícamelo más simple</button>
+    </div><div id="ev-doc"></div></div>`;
+  $("btn-ev").onclick=evaluarDocumento;
+}
+async function evaluarDocumento(){
+  const txt=$("resp-doc").value.trim();
+  if(txt.length<60) return toast("Escriba algo más antes de entregar.");
+  recordarUltimo("Entregó "+ROLES[RT.rol].doc+".");
+  $("ev-doc").innerHTML=`<div class="cargando"><span class="spin"></span> Corrigiendo…</div>`;
+  pipe("ev","act");
+  try{
+    const R=ROLES[RT.rol];
+    const usr=`${contexto(RT.rol,RT.mod)}
+
+CONSIGNA QUE SE LE DIO: "${RT.datos.consigna}"
+LO QUE ENTREGÓ EL PARTICIPANTE:
+"""
+${txt}
+"""
+Rúbrica: ${R.rub}
+Evalúa de 0 a 100 con exigencia profesional pero sin desanimar. Señala lo que hizo bien antes de lo que falta. En "consecuencia" describe qué pasaría con este documento en el expediente y en audiencia tal como está.
+Devuelve SOLO este JSON: {"score":número,"aciertos":"1-2 frases","mejoras":"1-3 frases con lo concreto que falta o está mal","consecuencia":"1-2 frases"}`;
+    const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.3});
+    const r=pJSON(out); pipe("ev","fin"); pipe("cons","fin");
+    $("ev-doc").innerHTML=`<div class="fb" style="margin-top:14px">
+      <div style="display:flex;align-items:center;gap:12px"><span class="punt" style="color:${r.score>=70?"var(--verde)":"var(--rojo)"}">${r.score}</span>
+      <span style="font-size:13px;color:var(--gris)">sobre 100 · umbral de la estrella: 70</span></div>
+      <p style="margin-top:9px"><b>Lo que sostiene.</b> ${glosar(esc(r.aciertos))}</p>
+      <p style="margin-top:6px"><b>Lo que falta.</b> ${glosar(esc(r.mejoras))}</p>
+      <p style="margin-top:6px"><b>En el expediente.</b> ${glosar(esc(r.consecuencia||""))}</p></div>
+      <button class="btn" style="margin-top:12px" onclick="cerrarReto(${r.score},3,'Entregó el documento y obtuvo ${r.score} sobre 100.')">Cerrar el módulo</button>`;
+  }catch(e){ pipeReset(); $("ev-doc").innerHTML=htmlError(e); }
+}
+
+/* ---------- motor 3: caza el defecto ---------- */
+async function genDefecto(){
+  const R=ROLES[RT.rol];
+  const usr=`${contexto(RT.rol,RT.mod)}
+
+Redacta ${R.defecto}, tal como aparecería en este expediente, e introduce en él entre 5 y 7 DEFECTOS deliberados relacionados con el foco del módulo. Los defectos deben ser realistas: omisiones, confusiones entre integridad, autenticidad y atribución, eslabones de custodia en blanco, conclusiones que exceden lo que la evidencia sostiene, actuaciones fuera del objeto autorizado, plazos ignorados. Nada de errores de ortografía ni de bromas.
+El documento debe leerse como un documento real, con su encabezado, sus apartados y su firma. Entre 200 y 320 palabras.
+Devuelve SOLO este JSON: {"documento":"el texto completo, con saltos de línea \\n","defectos":[{"d":"en qué consiste el defecto y por qué importa, 1-2 frases","grave":true}]}`;
+  const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.8});
+  const r=pJSON(out); RT.datos=r;
+  $("reto-panel").innerHTML=`<div class="qcard">
+    <div class="qn">CAZA EL DEFECTO · ${r.defectos.length} DEFECTOS DELIBERADOS</div>
+    <div style="background:var(--papel);border:2px solid var(--tinta);border-radius:10px;padding:14px;margin:9px 0 13px;font-family:'Space Mono';font-size:12.5px;line-height:1.65;white-space:pre-wrap">${esc(r.documento)}</div>
+    <div style="font-weight:700;font-size:14px;margin-bottom:6px">Enumere los defectos que encuentra, uno por línea.</div>
+    <textarea class="resp" id="resp-def" style="min-height:140px" placeholder="1. …&#10;2. …"></textarea>
+    <div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap"><button class="btn" id="btn-def">Entregar</button></div>
+    <div id="ev-def"></div></div>`;
+  $("btn-def").onclick=evaluarDefecto;
+}
+async function evaluarDefecto(){
+  const txt=$("resp-def").value.trim();
+  if(txt.length<20) return toast("Enumere al menos lo que haya visto.");
+  recordarUltimo("Analizó un documento defectuoso del expediente.");
+  $("ev-def").innerHTML=`<div class="cargando"><span class="spin"></span> Contrastando con la lista de defectos…</div>`;
+  pipe("ev","act");
+  try{
+    const D=RT.datos;
+    const usr=`Este es el listado real de defectos insertados en el documento:
+${D.defectos.map((x,i)=>`${i+1}. ${x.d}`).join("\n")}
+
+Esto es lo que enumeró el participante:
+"""
+${txt}
+"""
+Empareja lo que dice el participante con los defectos reales, aunque lo exprese con otras palabras: cuenta como encontrado si identifica el problema, no exige que use la misma terminología. Penaliza los falsos positivos solo si son afirmaciones incorrectas sobre el documento.
+Puntúa de 0 a 100 según la proporción de defectos encontrados, ponderando más los graves.
+Devuelve SOLO este JSON: {"score":número,"encontrados":[números de la lista],"nota":"2-3 frases sobre qué patrón de defectos se le escapa"}`;
+    const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{json:true,temp:0.2});
+    const r=pJSON(out); pipe("ev","fin"); pipe("cons","fin");
+    const enc=new Set((r.encontrados||[]).map(Number));
+    $("ev-def").innerHTML=`<div class="fb" style="margin-top:14px">
+      <div style="display:flex;align-items:center;gap:12px"><span class="punt" style="color:${r.score>=70?"var(--verde)":"var(--rojo)"}">${r.score}</span>
+      <span style="font-size:13px;color:var(--gris)">sobre 100 · umbral de la estrella: 70</span></div>
+      <p style="margin-top:9px">${glosar(esc(r.nota||""))}</p></div>
+      <div style="margin-top:12px;font-weight:700;font-size:14px">Los defectos que había</div>
+      <ul class="li">${D.defectos.map((x,i)=>`<li>${enc.has(i+1)?"✅":"⬜"} ${glosar(esc(x.d))}</li>`).join("")}</ul>
+      <button class="btn" style="margin-top:13px" onclick="cerrarReto(${r.score},2,'Cazó ${enc.size} de ${D.defectos.length} defectos.')">Cerrar el módulo</button>`;
+  }catch(e){ pipeReset(); $("ev-def").innerHTML=htmlError(e); }
+}
+
+/* ---------- cierre de reto ---------- */
+function cerrarReto(punt,dias,resumen){
+  punt=Math.max(0,Math.min(100,Math.round(Number(punt)||0)));
+  const mo=modoActual(), p=progOf(RT.rol,RT.mod.id);
+  const antes=p[mo.id]||0;
+  if(punt>antes) p[mo.id]=punt;
+  recordarUltimo(resumen);
+  avanzarDias(dias);
+  guardar(); pintarTabs();
+  const gano=punt>=mo.umbral && antes<mo.umbral;
+  $("reto-panel").innerHTML=`<div class="card">
+    <h3>${gano?"⭐ Estrella conseguida":"Módulo trabajado"}</h3>
+    <p style="margin-top:7px;font-size:14px">${esc(resumen)} ${punt>=mo.umbral?"":"No llegó al umbral de "+mo.umbral+", pero puede repetir el reto cuantas veces quiera: cada vez es distinto."}</p>
+    <p style="margin-top:7px;font-size:13.5px;color:var(--gris)">El expediente avanzó ${dias} días. Va por el día ${S.dia} de 90.</p>
+    <div style="display:flex;gap:8px;margin-top:13px;flex-wrap:wrap">
+      <button class="btn" onclick="cargarReto()">Repetir con otro reto</button>
+      <button class="btn claro" onclick="cerrar('ov-reto');abrirRuta('${RT.rol}')">Volver a la ruta</button>
+    </div></div>`;
+  abrirRuta(RT.rol);
+  document.querySelectorAll(".overlay.on").forEach(o=>{ if(o.id!=="ov-reto") o.classList.remove("on"); });
+  abrir("ov-reto");
+}
+
+/* ---------- explícamelo más simple ---------- */
+async function explicarSimple(destino,llave){
+  const cont=$(destino); if(!cont) return;
+  const texto=STASH[llave]||"";
+  const nivel=(cont.dataset.n?parseInt(cont.dataset.n):0)+1;
+  if(nivel>2) return toast("Ya está en el registro más simple disponible.");
+  cont.dataset.n=nivel;
+  cont.innerHTML=`<div class="simple"><span class="spin"></span> Reformulando…</div>`;
+  try{
+    const usr=`Reformula esto para alguien sin formación informática ni jurídica${nivel===2?", en un registro aún más básico que el anterior: como se lo explicaría a alguien que entra hoy al tribunal a trabajar de auxiliar":""}. Usa una analogía del mundo físico y un ejemplo cotidiano. Máximo 5 frases. No añadas datos nuevos ni referencias normativas.
+TEXTO: "${texto}"`;
+    const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{temp:0.7});
+    cont.innerHTML=`<div class="simple"><b>Más simple (nivel ${nivel} de 2).</b> ${glosar(esc(out))}
+      ${nivel<2?`<br><button class="btn claro sm" style="margin-top:8px" onclick="explicarSimple('${destino}','${llave}')">Aún más simple</button>`:""}</div>`;
+  }catch(e){ cont.innerHTML=`<div class="simple">${esc(e.message)}</div>`; }
+}
+
+/* ---------- vista cruzada ---------- */
+async function vistaCruzada(mio,otro){
+  abrir("ov-busca");
+  $("busca-res").innerHTML=`<div class="cargando"><span class="spin"></span> Mirando el mismo momento desde el asiento de ${esc(ROLES[otro].nm.toLowerCase())}…</div>`;
+  try{
+    const hito=CASO.hitos.filter(h=>h.d<=S.dia).slice(-1)[0]||CASO.hitos[0];
+    const usr=`EL CASO: ${CASO.res}
+MOMENTO: día ${hito.d}, "${hito.t}". ${hito.x}
+El participante recorre el caso como ${ROLES[mio].nm} (${ROLES[mio].cm}). Ahora quiere ver este mismo momento desde el asiento de ${ROLES[otro].nm} (${ROLES[otro].sb}), cuya competencia central es: ${ROLES[otro].cm}
+${reglasNivel(nivelGlobal())}
+Explica, en 3 párrafos cortos: qué está haciendo ${ROLES[otro].nm} en ese momento, por qué lo hace así aunque desde la silla de ${ROLES[mio].nm} pueda parecer un estorbo o un retraso, y qué necesita de ${ROLES[mio].nm} para que el caso no se rompa. Sin listas, sin encabezados.`;
+    const out=await llamar([{role:"system",content:SYS},{role:"user",content:usr}],{temp:0.7});
+    $("busca-res").innerHTML=`<div class="card"><h3>${ROLES[otro].ic} El mismo momento desde ${esc(ROLES[otro].nm.toLowerCase())}</h3>
+      <div style="margin-top:10px">${parrafos(out)}</div></div>`;
+  }catch(e){ $("busca-res").innerHTML=htmlError(e); }
+}
+
+/* ============================ BIBLIOTECA ============================ */
+let filtroBiblio="todo";
+function pintarBiblio(){
+  $("biblio-filtros").innerHTML=[["todo","Todo"]].concat(Object.entries(TIPOS_BIBLIO))
+    .map(([k,v])=>`<button class="${filtroBiblio===k?"sel":""}" onclick="filtroBiblio='${k}';pintarBiblio()">${esc(v)}</button>`).join("");
+  const q=norm($("q-biblio").value||"");
+  const lista=BIBLIO.filter(b=>(filtroBiblio==="todo"||b.tp===filtroBiblio) &&
+    (!q || norm(b.t+" "+b.sb+" "+b.c1+" "+b.c2).includes(q)));
+  $("biblio-lista").innerHTML = lista.length? lista.map(b=>`<button class="ficha" onclick="verFicha('${b.id}')">
+      <span class="tp ${b.tp}">${esc(TIPOS_BIBLIO[b.tp])}</span>
+      <span class="ft">${esc(b.t)}</span><span class="fs">${esc(b.sb)}</span>
+      <span class="f1">${esc(b.c1.slice(0,130))}…</span></button>`).join("")
+    : `<div class="nota">Nada coincide con esa búsqueda.</div>`;
+}
+$("q-biblio").addEventListener("input",pintarBiblio);
+let capaSel=1, fichaSel=null;
+function verFicha(id){
+  fichaSel=BIBLIO.find(b=>b.id===id); capaSel=1;
+  $("ficha-tt").textContent=fichaSel.t;
+  cerrar("ov-biblio"); abrir("ov-ficha"); pintarFicha();
+}
+function pintarFicha(){
+  const b=fichaSel;
+  $("ficha-capas").innerHTML=[[1,"Ficha"],[2,"Resumen operativo"],[3,"Texto in extenso"]]
+    .map(([n,l])=>`<button class="${capaSel===n?"sel":""}" onclick="capaSel=${n};pintarFicha()">Capa ${n} · ${l}</button>`).join("");
+  let cuerpo="";
+  if(capaSel===1) cuerpo=`<div style="font-size:15px">${parrafos(b.c1)}</div>`;
+  else if(capaSel===2) cuerpo=`<div style="font-size:14.5px">${parrafos(b.c2)}</div>`;
+  else cuerpo=`<div class="card plano"><h3>Texto completo</h3>
+      <p style="margin-top:8px;font-size:14px">Esta versión de Ruta Digital no incorpora los textos íntegros: incluirlos sin haberlos verificado contra la fuente oficial sería exactamente el error que la aplicación enseña a no cometer.</p>
+      <p style="margin-top:8px;font-size:14px">Fuente que debe consultarse: <b>${esc(b.fuente)}</b>.</p>
+      <button class="btn claro sm" style="margin-top:10px" onclick="window.open('https://www.google.com/search?q='+encodeURIComponent('${esc(b.t)} ${esc(b.sb)} República Dominicana texto oficial'),'_blank')">Buscar el texto oficial</button>
+      <p class="nota" style="margin-top:10px">Si su institución dispone de los textos verificados, colóquelos en un <span class="mono">conocimiento.json</span> junto al archivo de la app: la capa 3 y todo lo que genere la IA se anclarán en ellos.</p></div>`;
+  $("ficha-cuerpo").innerHTML=cuerpo+`
+    <div class="aviso-ver">⚠ Ficha no verificada en fuente oficial. Verifíquela antes de emplearla en un caso real.</div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="btn claro sm" onclick="abrir('ov-asist');cerrar('ov-ficha');preguntaSugerida('${stash("¿Cómo se aplica "+b.t+" en el caso Cuenta espejo?")}')">💬 Preguntar sobre esta ficha</button>
+      <button class="btn claro sm" onclick="cerrar('ov-ficha');abrir('ov-biblio')">← Biblioteca</button></div>`;
+}
+
+/* ============================ BUSCADOR TRANSVERSAL ============================ */
+function indice(){
+  const I=[];
+  ORDEN_ROLES.forEach(r=>ROLES[r].mods.forEach(m=>I.push({tipo:"Módulo",t:m.t,sub:ROLES[r].nm,txt:m.f,go:()=>{cerrar("ov-busca");abrirRuta(r);abrirModulo(m.id);}})));
+  BIBLIO.forEach(b=>I.push({tipo:"Biblioteca",t:b.t,sub:b.sb,txt:b.c1+" "+b.c2,go:()=>{cerrar("ov-busca");verFicha(b.id);}}));
+  Object.entries(GLOSARIO).forEach(([k,v])=>I.push({tipo:"Glosario",t:k,sub:"término",txt:v,go:null}));
+  CASO.hitos.forEach(h=>I.push({tipo:"Caso",t:h.t,sub:"día "+h.d,txt:h.x,go:()=>{cerrar("ov-busca");ir("inicio");refrescarInicio();}}));
+  return I;
+}
+let IDX=null, RESGO=[];
+function buscar(q){
+  if(!IDX) IDX=indice();
+  const ts=norm(q).split(/\W+/).filter(t=>t.length>2);
+  if(!ts.length) return [];
+  return IDX.map(it=>{ const h=norm(it.t+" "+it.sub+" "+it.txt); let s=0;
+      ts.forEach(t=>{ if(h.includes(t)) s+= it.t&&norm(it.t).includes(t)?3:1; }); return {it,s}; })
+    .filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,18).map(x=>x.it);
+}
+function pintarBusqueda(q){
+  const r=buscar(q); RESGO=r;
+  abrir("ov-busca");
+  if(!r.length){ $("busca-res").innerHTML=`<div class="nota">Nada coincide con «${esc(q)}». Pruebe con otras palabras, o pregúntelo con sus propias palabras en el asistente.</div>
+    <button class="btn" style="margin-top:11px" onclick="cerrar('ov-busca');abrir('ov-asist');preguntaSugerida('${stash(q)}')">💬 Preguntarlo al asistente</button>`; return; }
+  const gr={};
+  r.forEach(x=>{ (gr[x.tipo]=gr[x.tipo]||[]).push(x); });
+  $("busca-res").innerHTML=Object.entries(gr).map(([tp,items])=>`
+    <div style="font-family:'Space Mono';font-size:11.5px;font-weight:700;color:var(--gris);margin:12px 0 7px">${esc(tp.toUpperCase())}</div>
+    ${items.map(it=>{ const i=RESGO.indexOf(it);
+      return `<button class="res" ${it.go?`onclick="RESGO[${i}].go()"`:'style="cursor:default"'}>
+        <span class="rt">${esc(it.t)}</span><span class="rm">${esc(it.sub)}</span>
+        <div style="font-size:12.8px;margin-top:4px;color:var(--gris)">${esc(it.txt.slice(0,150))}${it.txt.length>150?"…":""}</div></button>`;}).join("")}`).join("")
+    + `<button class="btn claro sm" style="margin-top:12px" onclick="cerrar('ov-busca');abrir('ov-asist');preguntaSugerida('${stash(q)}')">💬 Preguntarlo con mis palabras</button>`;
+}
+$("q-top").addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.value.trim()) pintarBusqueda(e.target.value.trim()); });
+
+/* ============================ ASISTENTE ============================ */
+let CHAT=[];
+function pintarChat(){
+  $("chat").innerHTML=CHAT.map(m=>`<div class="msg ${m.role==="user"?"u":"a"}">${m.role==="user"?esc(m.content):glosar(esc(m.content)).replace(/\n/g,"<br>")}</div>`).join("");
+  $("chat").scrollTop=$("chat").scrollHeight;
+}
+function preguntaSugerida(llave){ $("chat-q").value=STASH[llave]||llave; enviarChat(); }
+async function enviarChat(){
+  const q=$("chat-q").value.trim(); if(!q) return;
+  $("chat-q").value="";
+  CHAT.push({role:"user",content:q}); pintarChat();
+  CHAT.push({role:"assistant",content:"…"}); pintarChat();
+  try{
+    const kb=kbBuscar(q);
+    const sys=`${SYS}
+Eres el ASISTENTE DE PREGUNTAS. Respondes en 3 párrafos como mucho: primero la respuesta en lenguaje llano, después la denominación técnica, y al final a qué ficha de la biblioteca o a qué norma remite. Si lo que se te pregunta no está sostenido por lo que se te ha dado, dilo con claridad y remite a la fuente oficial en lugar de improvisar una cita.
+No das asesoría sobre casos reales: si te la piden, recuérdalo y reconduce al caso simulado.
+FICHAS DE LA BIBLIOTECA:
+${BIBLIO.map(b=>`— ${b.t} (${b.sb}): ${b.c2}`).join("\n")}
+GLOSARIO: ${Object.entries(GLOSARIO).map(([k,v])=>k+": "+v).join(" · ")}
+EL CASO: ${CASO.res}
+${kb.length?`FRAGMENTOS VERIFICADOS (prevalecen):\n${kb.map(c=>c.texto).join("\n\n")}`:""}`;
+    const hist=CHAT.filter(m=>m.content!=="…").slice(-7);
+    const out=await llamar([{role:"system",content:sys}].concat(hist),{temp:0.5});
+    CHAT[CHAT.length-1]={role:"assistant",content:out};
+  }catch(e){
+    CHAT[CHAT.length-1]={role:"assistant",content:String(e.message).includes("SIN_CLAVE")
+      ? "Para responder necesito su clave de OpenAI. Póngala en ⚙ Ajustes: se guarda solo en este navegador."
+      : "No pude responder: "+e.message};
+  }
+  pintarChat();
+}
+$("chat-send").onclick=enviarChat;
+$("chat-q").addEventListener("keydown",e=>{ if(e.key==="Enter") enviarChat(); });
+
+/* ============================ CONSTANCIA ============================ */
+function codigo(rol){
+  const base=rol+"|"+S.dia+"|"+ROLES[rol].mods.map(m=>estrellas(rol,m.id)).join("")+"|"+(S.diagFecha||"");
+  let h=0; for(let i=0;i<base.length;i++){ h=(h*31+base.charCodeAt(i))>>>0; }
+  return "RD-"+rol.slice(0,3).toUpperCase()+"-"+h.toString(36).toUpperCase().padStart(7,"0");
+}
+function pintarConstancia(){
+  const rol=S.rol;
+  if(!rol||!rutaCompleta(rol)){
+    $("const-panel").innerHTML=`<div class="card"><h2>Todavía no</h2><p style="margin-top:8px;font-size:14px">La constancia aparece cuando todos los módulos de su ruta tienen al menos una estrella.</p></div>`;
+    return;
+  }
+  const R=ROLES[rol], est=R.mods.reduce((a,m)=>a+estrellas(rol,m.id),0), max=R.mods.length*3;
+  $("const-panel").innerHTML=`
+  <div class="constancia">
+    <div style="font-family:'Fraunces';font-weight:900;font-size:30px;letter-spacing:-1px">Ruta Digital</div>
+    <div style="font-size:13px;color:var(--gris);margin-top:2px">Recorrido completado · caso «${esc(CASO.t)}»</div>
+    <div style="margin:18px 0"><span class="nivelbadge">${esc(R.nm)} · Nivel ${nivelGlobal()} ${esc(NIVELES[nivelGlobal()].nm)}</span></div>
+    <div style="font-size:14px">${R.mods.length} módulos completados · ${est} de ${max} estrellas · ${S.decisiones} decisiones tomadas<br>El expediente cerró en el día ${S.dia} de 90.</div>
+    <div class="cod">${codigo(rol)}</div>
+    <div style="font-size:12px;color:var(--gris);margin-top:14px;max-width:56ch;margin-left:auto;margin-right:auto">
+      Este documento acredita que se recorrió la simulación. <b>No certifica aptitud profesional ni otorga habilitación oficial alguna.</b>
+      El código de arriba se calcula en este navegador y no es verificable públicamente: la constancia con verificación en línea del capítulo 6.2 de la especificación exige un servidor, y esta versión no tiene ninguno.
+    </div>
+  </div>
+  <div style="display:flex;gap:9px;margin-top:16px;flex-wrap:wrap">
+    <button class="btn" onclick="window.print()">🖨 Imprimir o guardar en PDF</button>
+    <button class="btn claro" onclick="ir('inicio');refrescarInicio()">Elegir otra silla</button>
+  </div>`;
+}
+
+/* ============================ AJUSTES ============================ */
+$("btn-cfg").onclick=()=>{ $("api-key").value=getKey(); $("model-select").value=getModelo(); kbInfo(); abrir("ov-cfg"); };
+$("api-key").addEventListener("change",e=>{ localStorage.setItem(K_API,e.target.value.trim()); pintarPaso(); pintarClave(); toast("Clave guardada en este navegador."); });
+$("model-select").addEventListener("change",e=>{ localStorage.setItem(K_MOD,e.target.value); toast("Modelo: "+e.target.value); });
+$("btn-biblio").onclick=()=>{ pintarBiblio(); abrir("ov-biblio"); };
+$("btn-asist").onclick=()=>{ abrir("ov-asist"); if(!CHAT.length){ CHAT.push({role:"assistant",content:"Pregunte con sus palabras. Le respondo primero en lenguaje llano y luego le digo cómo se llama técnicamente y a qué ficha remite.\n\nPor ejemplo: «me entregaron un USB en mesa de entrada, ¿qué hago?» o «¿qué prueba realmente una dirección IP?»."}); pintarChat(); } };
+$("btn-reset-reloj").onclick=()=>{ S.dia=CASO.diaDenuncia; guardar(); pintarReloj(); pintarExpediente(); pintarHitos(); toast("Expediente devuelto al día de la denuncia."); };
+$("btn-rediag").onclick=()=>{ cerrar("ov-cfg"); ir("diag"); iniciarDiag(); };
+$("btn-export").onclick=()=>{
+  const b=new Blob([JSON.stringify({app:"ruta-digital",v:1,fecha:new Date().toISOString(),estado:S},null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="ruta-digital-progreso.json"; a.click();
+};
+$("btn-import").onclick=()=>$("import-file").click();
+$("import-file").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+  r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.estado) throw 0;
+      S=Object.assign(estadoEnBlanco(),d.estado); guardar(); refrescarInicio(); ir("inicio"); cerrar("ov-cfg"); toast("Progreso importado."); }
+    catch(err){ toast("Ese archivo no tiene el formato esperado."); } };
+  r.readAsText(f);
+});
+$("btn-borrar").onclick=()=>{
+  if(!confirm("Se borrará su progreso y su clave de este navegador. No hay copia en ningún otro sitio. ¿Continuar?")) return;
+  localStorage.removeItem(K_ST); localStorage.removeItem(K_API); localStorage.removeItem(K_MOD);
+  S=estadoEnBlanco(); CHAT=[]; refrescarInicio(); ir("inicio"); cerrar("ov-cfg"); toast("Todo borrado.");
+};
+$("btn-load-kb").onclick=()=>$("kb-file").click();
+$("kb-file").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+  r.onload=()=>{ try{ kbBuild(JSON.parse(r.result)); toast("Base de conocimiento cargada."); }catch(err){ toast("Formato no reconocido."); } };
+  r.readAsText(f);
+});
+function pintarClave(){ $("btn-cfg").classList.toggle("key-missing",!getKey()); }
+
+/* ============================ ARRANQUE ============================ */
+refrescarInicio(); pintarClave(); kbInfo();
+if(!getKey()) setTimeout(()=>abrir("ov-cfg"),700);
+</script>
+</body>
+</html>
